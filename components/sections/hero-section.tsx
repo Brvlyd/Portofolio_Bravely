@@ -196,7 +196,7 @@ export function HeroSection() {
           {/* Main heading with staggered animation */}
           <MotionWrapper variants={itemVariants}>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-              Hi, I&apos;m{' '}
+              Hi! I&apos;m{' '}
               <span className="relative inline-block">
                 <motion.span 
                   className="bg-gradient-to-r from-blue-600 via-cyan-600 to-violet-600 bg-clip-text text-transparent"

@@ -43,7 +43,7 @@ export function HeroSection() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            Hi, I'm{' '}
+            Hi! I'm{' '}
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Bravely Dirgayuska
             </span>
