@@ -287,7 +287,7 @@ export function HeroSection() {
           </MotionWrapper>
 
           {/* Social Links with magnetic effect */}
-          <MotionWrapper variants={itemVariants} className="flex items-center justify-center gap-4 mb-12">
+          <MotionWrapper variants={itemVariants} className="flex items-center justify-center gap-6 mb-12">
             {[
               { href: 'https://www.linkedin.com/in/bravelyd/', icon: Linkedin, color: 'blue', rotate: -6 },
               { href: 'https://github.com/Brvlyd', icon: Github, color: 'gray', rotate: 0 },
@@ -299,21 +299,21 @@ export function HeroSection() {
                   target={social.href.startsWith('http') ? '_blank' : undefined}
                   rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   className={cn(
-                    "group relative p-4 rounded-2xl glass dark:glass-dark transition-all duration-300 hover:shadow-xl",
+                    "group relative w-16 h-16 flex items-center justify-center rounded-full glass dark:glass-dark transition-all duration-300 hover:shadow-2xl border-2 border-transparent hover:border-white/30",
                     social.color === 'blue' && 'hover:-rotate-6',
                     social.color === 'rose' && 'hover:rotate-6'
                   )}
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.15 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
                 >
                   <social.icon className={cn(
-                    "h-6 w-6 relative z-10",
+                    "h-7 w-7 relative z-10 transition-transform duration-300 group-hover:scale-110",
                     social.color === 'blue' && 'text-blue-600 dark:text-blue-400',
                     social.color === 'gray' && 'text-gray-800 dark:text-gray-200',
                     social.color === 'rose' && 'text-rose-600 dark:text-rose-400'
                   )} />
                   <div className={cn(
-                    "absolute inset-0 opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300",
+                    "absolute inset-0 opacity-0 group-hover:opacity-30 rounded-full transition-opacity duration-300",
                     social.color === 'blue' && 'bg-gradient-to-br from-blue-500 to-cyan-500',
                     social.color === 'gray' && 'bg-gradient-to-br from-gray-700 to-gray-900',
                     social.color === 'rose' && 'bg-gradient-to-br from-rose-500 to-pink-500'

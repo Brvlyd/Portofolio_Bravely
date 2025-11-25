@@ -8,12 +8,12 @@ import { ExperienceSection } from '@/components/sections/experience-section';
 import { ContactSection } from '@/components/sections/contact-section';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
-import { AnimatedBackground } from '@/components/animated-background';
+import { FloatingBubbles } from '@/components/floating-bubbles';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
-      <AnimatedBackground />
+      <FloatingBubbles />
       <div className="relative z-10">
         <Navigation />
         <HeroSection />
