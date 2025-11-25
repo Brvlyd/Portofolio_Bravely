@@ -103,7 +103,7 @@ export function AboutSection() {
               >
                 <div className="rounded-2xl overflow-hidden shadow-lg">
                   <img
-                    src="/images/bravely.png"
+                    src="/images/Bravely.png"
                     alt="Bravely Dirgayuska"
                     className="w-full h-96 object-cover object-top"
                     onError={(e) => {
