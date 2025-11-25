@@ -83,14 +83,14 @@ export function Footer() {
 
           <FadeIn direction="up" delay={0.2}>
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               {socialLinks.map((social, index) => (
                 <MagneticButton key={social.href} strength={0.3}>
                   <motion.a
                     href={social.href}
                     target={social.href.startsWith('http') ? '_blank' : undefined}
                     rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="p-2 rounded-full bg-secondary hover:bg-blue-600 hover:text-white transition-all duration-300"
+                    className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary hover:bg-blue-600 hover:text-white transition-all duration-300 hover:shadow-lg"
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
@@ -98,8 +98,8 @@ export function Footer() {
                       delay: shouldReduceMotion ? 0 : 0.3 + index * 0.05,
                       duration: 0.3,
                     }}
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.1, y: -2 }}
-                    whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.15, y: -3 }}
+                    whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
                     aria-label={social.label}
                   >
                     <social.icon className="h-5 w-5" />
