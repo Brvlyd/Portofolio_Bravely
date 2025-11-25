@@ -18,7 +18,7 @@ const projects = [
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Cloud Deployment', 'GitHub'],
     github: 'https://github.com/Brvlyd/RetenSYNC',
     demo: 'https://retensync.vercel.app/auth/login',
-    image: 'https://drive.google.com/uc?id=1-Cgd86GdawJlkMg3ODxIiy5MLq-tBtLf',
+    image: '/images/RetenSYNC.png',
   },
   {
     title: 'MarvelVerse',
@@ -32,7 +32,7 @@ const projects = [
     description: 'Complete redesign and frontend implementation for the Pekalongan Government website using HTML and Tailwind CSS. Integrated with Laravel backend and PHPMyAdmin database, managed through GitHub.',
     tags: ['HTML', 'Tailwind CSS', 'Laravel', 'UI/UX Design', 'Government Project'],
     github: 'https://github.com/dzikrirazzan/diskominfo_pekalongan',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Lambang_Kota_Pekalongan.png/480px-Lambang_Kota_Pekalongan.png',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fe/Lambang_Kota_Pekalongan.png',
   },
 ];
 
