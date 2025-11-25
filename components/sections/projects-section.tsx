@@ -18,21 +18,21 @@ const projects = [
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Cloud Deployment', 'GitHub'],
     github: 'https://github.com/Brvlyd/RetenSYNC',
     demo: 'https://retensync.vercel.app/auth/login',
-    image: 'bg-gradient-to-br from-blue-500 to-cyan-500',
+    image: 'https://drive.google.com/uc?id=1-Cgd86GdawJlkMg3ODxIiy5MLq-tBtLf',
   },
   {
     title: 'MarvelVerse',
     description: 'A user-centered Marvel-themed mobile app with visually engaging UI built in React Native. Features API integration to deliver interactive, personalized content with high accessibility and responsiveness.',
     tags: ['React Native', 'API Integration', 'UI/UX', 'Mobile Development'],
     github: 'https://github.com/Brvlyd/MarvelVerse',
-    image: 'bg-gradient-to-br from-red-500 to-pink-500',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png',
   },
   {
     title: 'Pekalongan Government Website Redesign',
     description: 'Complete redesign and frontend implementation for the Pekalongan Government website using HTML and Tailwind CSS. Integrated with Laravel backend and PHPMyAdmin database, managed through GitHub.',
     tags: ['HTML', 'Tailwind CSS', 'Laravel', 'UI/UX Design', 'Government Project'],
     github: 'https://github.com/dzikrirazzan/diskominfo_pekalongan',
-    image: 'bg-gradient-to-br from-green-500 to-emerald-500',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Lambang_Kota_Pekalongan.png/480px-Lambang_Kota_Pekalongan.png',
   },
 ];
 
@@ -113,19 +113,23 @@ export function ProjectsSection() {
 
                     <CardHeader className="relative">
                       <motion.div 
-                        className={cn(
-                          `h-52 rounded-xl ${project.image} mb-4 flex items-center justify-center relative overflow-hidden shadow-lg`
-                        )}
+                        className="h-52 rounded-xl mb-4 relative overflow-hidden shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
                         whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <motion.div 
-                          className="text-white text-7xl font-bold opacity-10"
-                          whileHover={shouldReduceMotion ? {} : { opacity: 0.2, scale: 1.1 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {project.title.charAt(0)}
-                        </motion.div>
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-contain p-4"
+                          onError={(e) => {
+                            // Fallback to gradient background if image fails to load
+                            e.currentTarget.style.display = 'none';
+                            const parent = e.currentTarget.parentElement;
+                            if (parent) {
+                              parent.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-cyan-500');
+                            }
+                          }}
+                        />
                         
                         {/* Animated gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
