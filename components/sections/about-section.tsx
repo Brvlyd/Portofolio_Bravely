@@ -106,6 +106,10 @@ export function AboutSection() {
                     src="/images/bravely.png"
                     alt="Bravely Dirgayuska"
                     className="w-full h-96 object-cover object-top"
+                    onError={(e) => {
+                      // Fallback to Google Drive if local image fails
+                      e.currentTarget.src = "https://drive.google.com/uc?id=1I_cnXq95bT7zK-XgN7COg7T09MpIl9T8";
+                    }}
                   />
                 </div>
               </motion.div>
