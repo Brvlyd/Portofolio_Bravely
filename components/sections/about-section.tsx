@@ -92,7 +92,7 @@ export function AboutSection() {
             </p>
           </FadeIn>
 
-          {/* Profile Image and Who I Am */}
+          {/* Profile Image and Who Am I */}
           <FadeIn direction="up" delay={0.1} className="mb-12">
             <div className="flex flex-col lg:flex-row items-start gap-8">
               {/* Profile Image */}
@@ -114,9 +114,9 @@ export function AboutSection() {
                 </div>
               </motion.div>
 
-              {/* Who I Am */}
+              {/* Who Am I */}
               <div className="w-full lg:w-2/3 pt-10">
-                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Who I Am</h3>
+                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Who Am I</h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   I&apos;m a Computer Engineering student at Diponegoro University with a strong
                   enthusiasm for technological advancements and a constant motivation to learn
