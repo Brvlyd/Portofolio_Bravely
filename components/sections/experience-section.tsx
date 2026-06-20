@@ -3,6 +3,8 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
 import { Briefcase, GraduationCap } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
@@ -12,8 +14,15 @@ const experiences = [
     type: 'work',
     title: 'Head of Human Resource Development Division',
     organization: 'Keluarga Mahasiswa Buddhis Dharmavamsa',
-    period: 'December 2024 - Present',
+    period: 'December 2025 - Present',
     description: 'Designed end-to-end program workflows, actively participated in internal and external Buddhist Student Activity Unit events, and organized routine meetings to facilitate two-way information exchange.',
+  },
+  {
+    type: 'work',
+    title: 'Infra-Security Standardization Intern',
+    organization: 'PT. Toyota Motor Manufacturing Indonesia',
+    period: 'February 2025 - August 2025',
+    description: 'Supported the MFA Integration Project with documentation, schedules, and training materials; contributed to Secure Coding Awareness Sharing covering input validation, SQL injection/XSS prevention, SonarQube, SAST/DAST, and vulnerability remediation; and automated administrative workflows using Excel and VBA.',
   },
   {
     type: 'work',
@@ -42,6 +51,20 @@ const experiences = [
     organization: 'LKMMD (Student Management Skills Training)',
     period: 'January 2024 - January 2025',
     description: 'Organized and supervised food distribution for major campus events, maintaining detailed budgets and coordinating with vendors to ensure smooth operations.',
+  },
+  {
+    type: 'work',
+    title: 'Member, Google Developer Student Club',
+    organization: 'Google Developer Student Club',
+    period: 'December 2023 - December 2024',
+    description: 'Visited and observed office environments at Menara BCA, Thamrin Main Branch Office.',
+  },
+  {
+    type: 'work',
+    title: 'Member, Software Division',
+    organization: 'Computer Engineering Research Club',
+    period: 'April 2023 - April 2024',
+    description: 'Learned various software and coding languages, and applied programming skills in practice.',
   },
 ];
 
@@ -140,44 +163,34 @@ export function ExperienceSection() {
                 <h3 className="text-2xl font-bold">Experience</h3>
               </motion.div>
 
-              <StaggerContainer className="space-y-6" staggerDelay={0.1}>
-                {experiences.map((exp, index) => (
-                  <StaggerItem key={index}>
-                    <motion.div
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.02, x: 5 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <motion.div 
-                              className="w-1 h-full bg-gradient-to-b from-blue-600 to-cyan-600 rounded-full min-h-[100px]"
-                              initial={{ scaleY: 0 }}
-                              whileInView={{ scaleY: 1 }}
-                              viewport={{ once: true }}
-                              transition={{ 
-                                delay: shouldReduceMotion ? 0 : 0.2 + index * 0.1,
-                                duration: 0.5,
-                              }}
-                              style={{ originY: 0 }}
-                            />
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-lg mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{exp.title}</h4>
-                              <p className="text-blue-600 dark:text-blue-400 font-medium mb-1">
-                                {exp.organization}
-                              </p>
-                              <p className="text-sm text-muted-foreground mb-3">{exp.period}</p>
-                              <p className="text-sm text-muted-foreground leading-relaxed">
-                                {exp.description}
-                              </p>
-                            </div>
+              <Card className="border-2 overflow-hidden">
+                <CardContent className="p-2 sm:p-4">
+                  <Accordion type="single" collapsible className="w-full">
+                    {experiences.map((exp, index) => (
+                      <AccordionItem key={index} value={`exp-${index}`} className="last:border-b-0">
+                        <AccordionTrigger className="hover:no-underline px-2 sm:px-3 group">
+                          <div className="flex flex-col items-start text-left gap-1.5 pr-2 min-w-0">
+                            <span className="font-semibold text-sm sm:text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              {exp.title}
+                            </span>
+                            <span className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium">
+                              {exp.organization}
+                            </span>
+                            <Badge variant="secondary" className="text-xs font-normal">
+                              {exp.period}
+                            </Badge>
                           </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-2 sm:px-3">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {exp.description}
+                          </p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
             </FadeIn>
 
             <FadeIn direction="right" delay={0.2}>

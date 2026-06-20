@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, Award, Users, Lightbulb } from 'lucide-react';
+import { GraduationCap, Award, Users, Lightbulb, Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
@@ -24,6 +24,11 @@ const highlights = [
     icon: Users,
     title: 'Leadership',
     description: 'Head of Social Department & HRD Division in student organizations',
+  },
+  {
+    icon: Briefcase,
+    title: 'Internship',
+    description: 'Infra-Security Standardization Intern at PT. Toyota Motor Manufacturing Indonesia (2025)',
   },
   {
     icon: Lightbulb,
@@ -101,7 +106,7 @@ export function AboutSection() {
                 whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="rounded-2xl overflow-hidden shadow-lg">
+                <div className="rounded-2xl overflow-hidden">
                   <img
                     src="/images/Bravely.png"
                     alt="Bravely Dirgayuska"

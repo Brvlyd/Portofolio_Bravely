@@ -13,6 +13,26 @@ import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapp
 
 const projects = [
   {
+    title: 'SITOMAS Kresno',
+    description: 'A CLI tool that automates converting Figma designs into React/Next.js TypeScript components, handling design parsing, style extraction (CSS/Tailwind), and asset management through the Figma API. Built as a production-ready Next.js app with full type safety and 27 passing Jest unit tests.',
+    tags: ['CLI Tool', 'Figma API', 'Next.js', 'TypeScript', 'Jest'],
+    demo: 'https://sitomaskresno.vercel.app',
+    image: '/images/logo-kresno.png',
+  },
+  {
+    title: 'Bearions',
+    description: 'A full-stack e-commerce platform for a clothing brand using Next.js 16, TypeScript, and Supabase, with a customer-facing catalog featuring search/filtering and image carousels, plus an admin dashboard for product and inventory management. Implements role-based access control with PostgreSQL Row-Level Security and Supabase Auth.',
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL RLS', 'E-commerce'],
+    image: '/images/Bearions.jpg',
+  },
+  {
+    title: 'November Coffee',
+    description: 'A full-stack cafe management system (TypeScript/Next.js + Supabase) with multi-shift attendance tracking, automated payroll, and real-time inventory, deployed on Vercel with automated cron jobs. Includes AI-powered OCR receipt processing and a polished Tailwind CSS + Framer Motion admin UI.',
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'AI/OCR', 'Tailwind CSS'],
+    demo: 'https://november-coffee.vercel.app',
+    image: '/images/november_logo.png',
+  },
+  {
     title: 'RetenSYNC',
     description: 'A live cloud application built with Next.js featuring static typing for correctness and safer refactors. Deployed on Vercel with configured builds, environment variables, and automatic preview/production releases on push.',
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Cloud Deployment', 'GitHub'],
@@ -25,7 +45,7 @@ const projects = [
     description: 'A user-centered Marvel-themed mobile app with visually engaging UI built in React Native. Features API integration to deliver interactive, personalized content with high accessibility and responsiveness.',
     tags: ['React Native', 'API Integration', 'UI/UX', 'Mobile Development'],
     github: 'https://github.com/Brvlyd/MarvelVerse',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png',
+    image: '/images/marvel.png',
   },
   {
     title: 'Pekalongan Government Website Redesign',
@@ -130,7 +150,7 @@ export function ProjectsSection() {
                             }
                           }}
                         />
-                        
+
                         {/* Animated gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </motion.div>

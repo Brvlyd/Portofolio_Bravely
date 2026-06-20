@@ -56,10 +56,10 @@ const skillCategories = [
 ];
 
 const certifications = [
-  'ORACLE Java Programming',
-  'Cisco CCNA Networking',
-  'Digital Talent Java Fundamentals',
-  'Database Foundations',
+  'Digital Talent Java Fundamentals & Programming (2024)',
+  'Java Programming - ORACLE Academy (2024)',
+  'Java Fundamentals - ORACLE Academy (2023)',
+  'IT Essentials: PC Hardware and Software - Cisco Networking Academy (2023)',
   'Duolingo English Test (135/160)',
 ];
 

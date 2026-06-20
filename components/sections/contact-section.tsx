@@ -30,7 +30,23 @@ export function ContactSection() {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('https://formsubmit.co/ajax/bravelydirgayuska@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
 
       toast.success('Message sent successfully!', {
         description: "I'll get back to you as soon as possible.",
