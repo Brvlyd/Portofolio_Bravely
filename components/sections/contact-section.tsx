@@ -94,7 +94,7 @@ export function ContactSection() {
     {
       icon: MapPin,
       title: 'Location',
-      content: 'Tembalang, Semarang, Indonesia',
+      content: 'Jakarta, Indonesia',
       href: null,
       color: 'orange',
     },

@@ -21,7 +21,7 @@ const skillCategories = [
   {
     icon: Database,
     title: 'Backend & Database',
-    skills: ['Node.js', 'Laravel', 'SQL', 'PHPMyAdmin', 'Oracle Database', 'API Integration'],
+    skills: ['Node.js', 'Laravel', 'Supabase', 'PostgreSQL (RLS)', 'SQL', 'PHPMyAdmin', 'Oracle Database', 'API Integration'],
     color: 'from-green-600 to-emerald-600',
     level: 75,
   },
@@ -35,7 +35,7 @@ const skillCategories = [
   {
     icon: Cloud,
     title: 'DevOps & Tools',
-    skills: ['Git', 'GitHub', 'Vercel', 'Cloud Deployment', 'Version Control'],
+    skills: ['Git', 'GitHub', 'Vercel', 'Cloud Deployment', 'Version Control', 'Jest', 'VBA/Excel Automation'],
     color: 'from-orange-600 to-amber-600',
     level: 70,
   },

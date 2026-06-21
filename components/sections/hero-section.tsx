@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Download, Github, Linkedin, Mail, Sparkles, Code2, Rocket } from 'lucide-react';
@@ -8,6 +9,11 @@ import { cn } from '@/lib/utils';
 import { MagneticButton } from '@/components/magnetic-button';
 import { ScrollIndicator } from '@/components/scroll-indicator';
 import { Typewriter } from '@/components/text-animations';
+
+const ThreeHeroBackground = dynamic(
+  () => import('@/components/three-hero-background').then((mod) => mod.ThreeHeroBackground),
+  { ssr: false }
+);
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -91,6 +97,9 @@ export function HeroSection() {
         }}
       />
 
+      {/* 3D floating shapes accent */}
+      {!shouldReduceMotion && <ThreeHeroBackground />}
+
       {/* Animated orbs with parallax */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
@@ -171,21 +180,9 @@ export function HeroSection() {
         >
           {/* Badge with animation */}
           <MotionWrapper variants={itemVariants} className="mb-6">
-            <motion.span 
+            <motion.span
               className="inline-flex items-center gap-2 px-5 py-2.5 glass dark:glass-dark text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium"
               whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-              animate={shouldReduceMotion ? {} : {
-                boxShadow: [
-                  '0 0 20px rgba(59, 130, 246, 0.3)',
-                  '0 0 40px rgba(59, 130, 246, 0.5)',
-                  '0 0 20px rgba(59, 130, 246, 0.3)',
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
             >
               <Sparkles className="w-4 h-4" />
               Welcome to my portfolio

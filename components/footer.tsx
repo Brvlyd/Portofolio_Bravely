@@ -53,7 +53,7 @@ export function Footer() {
               Bravely Dirgayuska
             </motion.h3>
             <p className="text-sm text-muted-foreground">
-              Computer Engineering student passionate about building innovative solutions
+              Computer Engineering graduate passionate about building innovative solutions
               and contributing to technological advancement.
             </p>
           </FadeIn>
