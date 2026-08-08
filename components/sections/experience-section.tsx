@@ -1,301 +1,195 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Badge } from '@/components/ui/badge';
-import { Briefcase, GraduationCap } from 'lucide-react';
-import { useScrollAnimation } from '@/hooks/use-scroll-animation';
+import { Building2, GraduationCap, Sparkles, Users } from 'lucide-react';
+import { SectionHeading } from '@/components/section-heading';
+import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
+import { education, experiences, type Experience } from '@/lib/data';
+import { ease, viewport } from '@/lib/motion';
+import { cn } from '@/lib/utils';
 
-const experiences = [
-  {
-    type: 'work',
-    title: 'Head of Human Resource Development Division',
-    organization: 'Keluarga Mahasiswa Buddhis Dharmavamsa',
-    period: 'December 2025 - Present',
-    description: 'Designed end-to-end program workflows, actively participated in internal and external Buddhist Student Activity Unit events, and organized routine meetings to facilitate two-way information exchange.',
+const kindMeta: Record<
+  Experience['kind'],
+  { label: string; icon: typeof Building2; className: string }
+> = {
+  internship: {
+    label: 'Internship',
+    icon: Building2,
+    className: 'from-brand-1 to-brand-3',
   },
-  {
-    type: 'work',
-    title: 'Infra-Security Standardization Intern',
-    organization: 'PT. Toyota Motor Manufacturing Indonesia',
-    period: 'February 2025 - August 2025',
-    description: 'Supported the MFA Integration Project with documentation, schedules, and training materials; contributed to Secure Coding Awareness Sharing covering input validation, SQL injection/XSS prevention, SonarQube, SAST/DAST, and vulnerability remediation; and automated administrative workflows using Excel and VBA.',
+  organization: {
+    label: 'Organization',
+    icon: Users,
+    className: 'from-emerald-500 to-teal-400',
   },
-  {
-    type: 'work',
-    title: 'Head of Social Department',
-    organization: 'Computer Engineering Student Association',
-    period: 'March 2024 - March 2025',
-    description: 'Planned social program workflows, participated in external forums and community service, and scheduled monthly meetings to track progress and generate new service ideas.',
+  experience: {
+    label: 'Experience',
+    icon: Sparkles,
+    className: 'from-amber-500 to-orange-400',
   },
-  {
-    type: 'work',
-    title: 'Awardee, Bakti BCA Scholarship',
-    organization: 'PT Bank Central Asia Tbk.',
-    period: 'January 2024 - January 2025',
-    description: 'Participated in self-development programs, gained familiarity with office environments and cross-division functions, and developed a Business Impact Plan for local MSMEs.',
-  },
-  {
-    type: 'work',
-    title: 'Speaker - SPACE Event',
-    organization: 'Computer Engineering Student Association',
-    period: 'January 2024 - January 2025',
-    description: 'Created comprehensive materials and delivered engaging seminars about the Bakti BCA Scholarship, breaking down complex application steps into clear, actionable stages.',
-  },
-  {
-    type: 'work',
-    title: 'Internal Coordinator, Consumption Division',
-    organization: 'LKMMD (Student Management Skills Training)',
-    period: 'January 2024 - January 2025',
-    description: 'Organized and supervised food distribution for major campus events, maintaining detailed budgets and coordinating with vendors to ensure smooth operations.',
-  },
-  {
-    type: 'work',
-    title: 'Member, Google Developer Student Club',
-    organization: 'Google Developer Student Club',
-    period: 'December 2023 - December 2024',
-    description: 'Visited and observed office environments at Menara BCA, Thamrin Main Branch Office.',
-  },
-  {
-    type: 'work',
-    title: 'Member, Software Division',
-    organization: 'Computer Engineering Research Club',
-    period: 'April 2023 - April 2024',
-    description: 'Learned various software and coding languages, and applied programming skills in practice.',
-  },
-];
+};
 
-const education = [
-  {
-    degree: 'Bachelor of Computer Engineering',
-    institution: 'Diponegoro University',
-    location: 'Tembalang, Semarang',
-    period: '2022 - 2026 (Expected)',
-    description: 'Focus on software development, computer systems, and engineering principles.',
-  },
-  {
-    degree: 'Senior High School',
-    institution: 'State Senior High School 1 Jakarta',
-    location: 'Jakarta',
-    period: '2019 - 2022',
-    description: 'Graduated with strong foundation in mathematics and sciences.',
-  },
-];
+function TimelineEntry({ item, index }: { item: Experience; index: number }) {
+  const meta = kindMeta[item.kind];
+  const Icon = meta.icon;
+
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -24, filter: 'blur(6px)' }}
+      whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+      viewport={viewport}
+      transition={{ duration: 0.6, ease: ease.out, delay: index * 0.05 }}
+      className="relative pl-12"
+    >
+      {/* Node */}
+      <span
+        className={cn(
+          'absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-md',
+          meta.className
+        )}
+      >
+        <Icon className="h-4 w-4 text-white" />
+      </span>
+
+      <div className="pb-10">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-border/70 bg-card/60 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            {meta.label}
+          </span>
+          <span className="font-mono text-xs text-muted-foreground">
+            {item.period}
+          </span>
+        </div>
+
+        <h4 className="font-display text-lg font-semibold leading-snug">
+          {item.role}
+        </h4>
+        <p className="mt-0.5 text-sm font-medium text-brand-1">
+          {item.organization}
+        </p>
+
+        <ul className="mt-3 space-y-2">
+          {item.points.map((point) => (
+            <li key={point} className="flex gap-2.5 text-sm text-muted-foreground">
+              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/50" />
+              <span className="leading-relaxed">{point}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.li>
+  );
+}
 
 export function ExperienceSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isVisible = useScrollAnimation(sectionRef);
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section ref={sectionRef} id="experience" className="py-20 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div 
-          className="absolute top-40 right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, -20, 0],
-            y: [0, 25, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-20 left-20 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      </div>
-
+    <section id="experience" className="relative py-24 sm:py-32">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Experience &{' '}
-              <motion.span 
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"
-                style={{ backgroundSize: '200% 200%' }}
-                animate={shouldReduceMotion ? {} : {
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              >
-                Education
-              </motion.span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              My journey through leadership roles, professional development, and academic achievements
-            </p>
-          </FadeIn>
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading
+            eyebrow="Journey"
+            title="Experience &"
+            accent="education"
+            description="Professional work, leadership roles, and academic background."
+            className="mb-16"
+          />
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            <FadeIn direction="left" delay={0.1}>
-              <motion.div 
-                className="flex items-center gap-3 mb-8"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div 
-                  className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
-                >
-                  <Briefcase className="h-5 w-5 text-blue-600" />
-                </motion.div>
-                <h3 className="text-2xl font-bold">Experience</h3>
-              </motion.div>
+          <div className="grid gap-12 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
+            {/* Timeline */}
+            <div>
+              <FadeIn className="mb-8 flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-1 to-brand-3 shadow-lg shadow-brand-1/20">
+                  <Building2 className="h-5 w-5 text-white" />
+                </span>
+                <h3 className="font-display text-2xl font-bold">Experience</h3>
+              </FadeIn>
 
-              <Card className="border-2 overflow-hidden">
-                <CardContent className="p-2 sm:p-4">
-                  <Accordion type="single" collapsible className="w-full">
-                    {experiences.map((exp, index) => (
-                      <AccordionItem key={index} value={`exp-${index}`} className="last:border-b-0">
-                        <AccordionTrigger className="hover:no-underline px-2 sm:px-3 group">
-                          <div className="flex flex-col items-start text-left gap-1.5 pr-2 min-w-0">
-                            <span className="font-semibold text-sm sm:text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              {exp.title}
-                            </span>
-                            <span className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium">
-                              {exp.organization}
-                            </span>
-                            <Badge variant="secondary" className="text-xs font-normal">
-                              {exp.period}
-                            </Badge>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-2 sm:px-3">
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {exp.description}
+              <ol className="relative">
+                {/* Rail */}
+                <span
+                  aria-hidden
+                  className="absolute bottom-10 left-[17px] top-10 w-px bg-gradient-to-b from-brand-1/40 via-border to-transparent"
+                />
+                {experiences.map((item, index) => (
+                  <TimelineEntry key={item.role} item={item} index={index} />
+                ))}
+              </ol>
+            </div>
+
+            {/* Education + achievements */}
+            <div>
+              <FadeIn className="mb-8 flex items-center gap-3" direction="left">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/20">
+                  <GraduationCap className="h-5 w-5 text-white" />
+                </span>
+                <h3 className="font-display text-2xl font-bold">Education</h3>
+              </FadeIn>
+
+              <StaggerContainer className="space-y-4" staggerDelay={0.1}>
+                {education.map((edu) => (
+                  <StaggerItem key={edu.degree}>
+                    <SpotlightCard className="p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <h4 className="font-display font-semibold leading-snug">
+                            {edu.degree}
+                          </h4>
+                          <p className="mt-1 text-sm font-medium text-emerald-500 dark:text-emerald-400">
+                            {edu.institution}
                           </p>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn direction="right" delay={0.2}>
-              <motion.div 
-                className="flex items-center gap-3 mb-8"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div 
-                  className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
-                >
-                  <GraduationCap className="h-5 w-5 text-green-600" />
-                </motion.div>
-                <h3 className="text-2xl font-bold">Education</h3>
-              </motion.div>
-
-              <StaggerContainer className="space-y-6" staggerDelay={0.15}>
-                {education.map((edu, index) => (
-                  <StaggerItem key={index}>
-                    <motion.div
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.02, x: 5 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <motion.div 
-                              className="w-1 h-full bg-gradient-to-b from-green-600 to-emerald-600 rounded-full min-h-[80px]"
-                              initial={{ scaleY: 0 }}
-                              whileInView={{ scaleY: 1 }}
-                              viewport={{ once: true }}
-                              transition={{ 
-                                delay: shouldReduceMotion ? 0 : 0.3 + index * 0.15,
-                                duration: 0.5,
-                              }}
-                              style={{ originY: 0 }}
-                            />
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-lg mb-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">{edu.degree}</h4>
-                              <p className="text-green-600 dark:text-green-400 font-medium mb-1">
-                                {edu.institution}
-                              </p>
-                              <p className="text-sm text-muted-foreground mb-1">
-                                {edu.location} • {edu.period}
-                              </p>
-                              <p className="text-sm text-muted-foreground leading-relaxed">
-                                {edu.description}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {edu.location}
+                          </p>
+                        </div>
+                        <span className="shrink-0 rounded-full border border-border/70 bg-background/60 px-2.5 py-1 font-mono text-xs text-muted-foreground">
+                          {edu.period}
+                        </span>
+                      </div>
+                      <p className="mt-4 inline-flex rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-400/10 px-3 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                        {edu.score}
+                      </p>
+                    </SpotlightCard>
                   </StaggerItem>
                 ))}
               </StaggerContainer>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: shouldReduceMotion ? 0 : 0.5, duration: 0.5 }}
-              >
-                <Card className="mt-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-2 overflow-hidden">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-4">Key Achievements</h4>
-                    <ul className="space-y-2">
-                      {[
-                        'Bakti BCA Scholarship Awardee (2024-2025)',
-                        'Leadership positions in multiple student organizations',
-                        'Duolingo English Test Score: 135/160',
-                        'Multiple technical certifications (ORACLE, Cisco, etc.)',
-                      ].map((achievement, i) => (
-                        <motion.li 
-                          key={i}
-                          className="flex items-start gap-2 group cursor-default"
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ 
-                            delay: shouldReduceMotion ? 0 : 0.6 + i * 0.1,
-                            duration: 0.3,
-                          }}
-                          whileHover={shouldReduceMotion ? {} : { x: 5 }}
-                        >
-                          <motion.div 
-                            className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"
-                            animate={shouldReduceMotion ? {} : { scale: [1, 1.3, 1] }}
-                            transition={{ 
-                              duration: 2, 
-                              repeat: Infinity, 
-                              delay: i * 0.2,
-                            }}
-                          />
-                          <p className="text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{achievement}</p>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </FadeIn>
+              <FadeIn delay={0.2} className="mt-6">
+                <div className="overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-brand-1/[0.07] via-transparent to-brand-3/[0.07] p-6 backdrop-blur-sm">
+                  <h4 className="mb-4 font-display font-semibold">
+                    Key Achievements
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      'Bakti BCA Scholarship Awardee (2024–2025)',
+                      'Led two divisions across student organizations',
+                      'Duolingo English Test — 135/160',
+                      'ORACLE Academy & Cisco Networking Academy certified',
+                    ].map((achievement, i) => (
+                      <motion.li
+                        key={achievement}
+                        initial={{ opacity: 0, x: -12 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={viewport}
+                        transition={{
+                          duration: 0.45,
+                          ease: ease.out,
+                          delay: shouldReduceMotion ? 0 : i * 0.08,
+                        }}
+                        className="flex items-start gap-3 text-sm"
+                      >
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-brand-1 to-brand-2" />
+                        <span className="leading-relaxed text-muted-foreground">
+                          {achievement}
+                        </span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </div>
       </div>

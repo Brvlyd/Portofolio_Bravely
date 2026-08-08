@@ -1,7 +1,13 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { ease, viewport } from '@/lib/motion';
+
+/* -------------------------------------------------------------------------- */
+/*                                 Typewriter                                  */
+/* -------------------------------------------------------------------------- */
 
 interface TypewriterProps {
   words: string[];
@@ -14,69 +20,97 @@ interface TypewriterProps {
 export function Typewriter({
   words,
   className = '',
-  typingSpeed = 100,
-  deletingSpeed = 50,
-  delayBetweenWords = 2000,
+  typingSpeed = 75,
+  deletingSpeed = 35,
+  delayBetweenWords = 1800,
 }: TypewriterProps) {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
+  const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      setCurrentText(words[0]);
+      setText(words[0]);
       return;
     }
 
-    const word = words[currentWordIndex];
+    const word = words[wordIndex];
+    let delay = isDeleting ? deletingSpeed : typingSpeed;
 
-    const timeout = setTimeout(
-      () => {
-        if (!isDeleting) {
-          if (currentText.length < word.length) {
-            setCurrentText(word.slice(0, currentText.length + 1));
-          } else {
-            setTimeout(() => setIsDeleting(true), delayBetweenWords);
-          }
+    // Pause at the end of a fully typed word before deleting it.
+    if (!isDeleting && text === word) delay = delayBetweenWords;
+
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (text === word) {
+          setIsDeleting(true);
         } else {
-          if (currentText.length > 0) {
-            setCurrentText(currentText.slice(0, -1));
-          } else {
-            setIsDeleting(false);
-            setCurrentWordIndex((prev) => (prev + 1) % words.length);
-          }
+          setText(word.slice(0, text.length + 1));
         }
-      },
-      isDeleting ? deletingSpeed : typingSpeed
-    );
+      } else if (text === '') {
+        setIsDeleting(false);
+        setWordIndex((prev) => (prev + 1) % words.length);
+      } else {
+        setText(text.slice(0, -1));
+      }
+    }, delay);
 
     return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, currentWordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords, shouldReduceMotion]);
-
-  if (shouldReduceMotion) {
-    return <span className={className}>{words[0]}</span>;
-  }
+  }, [
+    text,
+    isDeleting,
+    wordIndex,
+    words,
+    typingSpeed,
+    deletingSpeed,
+    delayBetweenWords,
+    shouldReduceMotion,
+  ]);
 
   return (
-    <span className={className}>
-      {currentText}
-      <motion.span
-        animate={{ opacity: [1, 0, 1] }}
-        transition={{ duration: 0.8, repeat: Infinity }}
-        className="inline-block w-[3px] h-[1em] bg-current ml-1 align-middle"
-      />
+    <span className={cn('inline-flex items-center', className)}>
+      <span>{shouldReduceMotion ? words[0] : text}</span>
+      {!shouldReduceMotion && (
+        <span className="typewriter-cursor ml-1 inline-block h-[1.1em] w-[2px] translate-y-[0.1em] bg-gradient-to-b from-brand-1 to-brand-2" />
+      )}
     </span>
   );
 }
 
-interface TextRevealProps {
+/* -------------------------------------------------------------------------- */
+/*                                Word reveal                                  */
+/* -------------------------------------------------------------------------- */
+
+interface WordRevealProps {
   text: string;
   className?: string;
+  wordClassName?: string;
   delay?: number;
+  /** Animate on mount instead of on scroll into view. */
+  animateOnMount?: boolean;
 }
 
-export function TextReveal({ text, className = '', delay = 0 }: TextRevealProps) {
+// Blur-lift rather than a clipped mask reveal: no overflow-hidden means the
+// blur halo isn't cut off and descenders never clip at tight line-heights.
+const wordVariants: Variants = {
+  hidden: { opacity: 0, y: '0.3em', filter: 'blur(12px)' },
+  visible: {
+    opacity: 1,
+    y: '0em',
+    filter: 'blur(0px)',
+    transition: { duration: 0.75, ease: ease.out },
+  },
+};
+
+/** Reveals a headline word-by-word with a blur lift. */
+export function WordReveal({
+  text,
+  className,
+  wordClassName,
+  delay = 0,
+  animateOnMount = false,
+}: WordRevealProps) {
   const shouldReduceMotion = useReducedMotion();
   const words = text.split(' ');
 
@@ -84,27 +118,49 @@ export function TextReveal({ text, className = '', delay = 0 }: TextRevealProps)
     return <span className={className}>{text}</span>;
   }
 
+  const motionProps = animateOnMount
+    ? { initial: 'hidden' as const, animate: 'visible' as const }
+    : { initial: 'hidden' as const, whileInView: 'visible' as const, viewport };
+
   return (
-    <span className={className}>
-      {words.map((word, index) => (
-        <motion.span
-          key={index}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.5,
-            delay: delay + index * 0.1,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className="inline-block mr-[0.25em]"
-        >
-          {word}
-        </motion.span>
+    <motion.span
+      {...motionProps}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.09, delayChildren: delay } },
+      }}
+      className={cn('inline-flex flex-wrap gap-x-[0.28em]', className)}
+    >
+      {words.map((word, i) => (
+        <span key={`${word}-${i}`} className="inline-block">
+          <motion.span
+            variants={wordVariants}
+            className={cn('inline-block', wordClassName)}
+          >
+            {word}
+          </motion.span>
+        </span>
       ))}
-    </span>
+    </motion.span>
   );
 }
+
+/** Kept for compatibility with the previous API. */
+export function TextReveal({
+  text,
+  className = '',
+  delay = 0,
+}: {
+  text: string;
+  className?: string;
+  delay?: number;
+}) {
+  return <WordReveal text={text} className={className} delay={delay} />;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Animated counter                               */
+/* -------------------------------------------------------------------------- */
 
 interface AnimatedCounterProps {
   value: number;
@@ -112,50 +168,56 @@ interface AnimatedCounterProps {
   className?: string;
   suffix?: string;
   prefix?: string;
+  decimals?: number;
 }
 
+/** Counts up once the element scrolls into view. */
 export function AnimatedCounter({
   value,
-  duration = 2,
+  duration = 1.6,
   className = '',
   suffix = '',
   prefix = '',
+  decimals = 0,
 }: AnimatedCounterProps) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [display, setDisplay] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (!started) return;
+
     if (shouldReduceMotion) {
-      setDisplayValue(value);
+      setDisplay(value);
       return;
     }
 
-    let startTime: number | null = null;
-    let animationFrame: number;
+    let frame: number;
+    let start: number | null = null;
 
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      
-      setDisplayValue(Math.floor(progress * value));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
+    const tick = (timestamp: number) => {
+      if (start === null) start = timestamp;
+      const progress = Math.min((timestamp - start) / (duration * 1000), 1);
+      // Ease-out cubic so the count decelerates into its final value.
+      setDisplay(value * (1 - Math.pow(1 - progress, 3)));
+      if (progress < 1) frame = requestAnimationFrame(tick);
     };
 
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [value, duration, shouldReduceMotion]);
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [started, value, duration, shouldReduceMotion]);
 
   return (
-    <span className={className}>
-      {prefix}{displayValue}{suffix}
-    </span>
+    <motion.span
+      ref={ref}
+      className={className}
+      onViewportEnter={() => setStarted(true)}
+      viewport={{ once: true, margin: '-40px' }}
+    >
+      {prefix}
+      {display.toFixed(decimals)}
+      {suffix}
+    </motion.span>
   );
 }

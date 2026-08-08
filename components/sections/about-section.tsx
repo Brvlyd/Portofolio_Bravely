@@ -1,219 +1,161 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, Award, Users, Lightbulb, Briefcase } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useScrollAnimation } from '@/hooks/use-scroll-animation';
+import { Award, Briefcase, GraduationCap, Users } from 'lucide-react';
+import { SectionHeading } from '@/components/section-heading';
+import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { TiltCard } from '@/components/tilt-card';
+import { highlights, profile, whatIDo } from '@/lib/data';
+import { ease } from '@/lib/motion';
 
-const highlights = [
-  {
-    icon: GraduationCap,
-    title: 'Education',
-    description: 'Bachelor in Computer Engineering at Diponegoro University (Expected 2026)',
-  },
-  {
-    icon: Award,
-    title: 'Scholarship',
-    description: 'Bakti BCA Scholarship Awardee (2024-2025)',
-  },
-  {
-    icon: Users,
-    title: 'Leadership',
-    description: 'Head of Social Department & HRD Division in student organizations',
-  },
-  {
-    icon: Briefcase,
-    title: 'Internship',
-    description: 'Infra-Security Standardization Intern at PT. Toyota Motor Manufacturing Indonesia (2025)',
-  },
-  {
-    icon: Lightbulb,
-    title: 'Innovation',
-    description: 'Built and deployed multiple web applications with modern tech stacks',
-  },
-];
+const iconMap = {
+  graduation: GraduationCap,
+  briefcase: Briefcase,
+  award: Award,
+  users: Users,
+} as const;
 
 export function AboutSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isVisible = useScrollAnimation(sectionRef);
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section ref={sectionRef} id="about" className="py-20 bg-secondary/30 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div 
-          className="absolute top-20 left-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, 20, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-20 right-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, -25, 0],
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      </div>
-
+    <section id="about" className="relative py-24 sm:py-32">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              About{' '}
-              <motion.span 
-                className="bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600 bg-clip-text text-transparent"
-                style={{ backgroundSize: '200% 200%' }}
-                animate={shouldReduceMotion ? {} : {
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              >
-                Me
-              </motion.span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Learn more about my background, education, and what drives my passion for technology
-            </p>
-          </FadeIn>
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading
+            eyebrow="About"
+            title="Get to know"
+            accent="me"
+            description="My background, education, and what drives the way I build."
+            className="mb-16"
+          />
 
-          {/* Profile Image and Who Am I */}
-          <FadeIn direction="up" delay={0.1} className="mb-12">
-            <div className="flex flex-col lg:flex-row items-start gap-8">
-              {/* Profile Image */}
-              <motion.div 
-                className="w-full lg:w-1/3 flex justify-center lg:justify-start"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="rounded-2xl overflow-hidden">
+          {/* Portrait + bio */}
+          <div className="mb-16 grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <FadeIn direction="right">
+              <div className="group relative mx-auto w-full max-w-md">
+                {/* Gradient frame */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-br from-brand-1/40 via-brand-2/30 to-brand-3/40 opacity-60 blur-lg transition-opacity duration-500 group-hover:opacity-100" />
+                <motion.div
+                  whileHover={shouldReduceMotion ? {} : { y: -6 }}
+                  transition={{ duration: 0.4, ease: ease.out }}
+                  className="relative overflow-hidden rounded-3xl border border-border/70 bg-card"
+                >
                   <img
                     src="/images/Bravely.png"
-                    alt="Bravely Dirgayuska"
-                    className="w-full h-96 object-cover object-top"
-                    onError={(e) => {
-                      // Fallback to Google Drive if local image fails
-                      e.currentTarget.src = "https://drive.google.com/uc?id=1I_cnXq95bT7zK-XgN7COg7T09MpIl9T8";
-                    }}
+                    alt={`Portrait of ${profile.name}`}
+                    /* Matches the source image's native 5:7, so object-cover
+                       shows the full frame instead of cropping the bottom. */
+                    className="aspect-[5/7] w-full object-cover object-center"
+                    loading="lazy"
                   />
-                </div>
-              </motion.div>
+                  {/* Bottom fade + caption */}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-5">
+                    <p className="font-display text-lg font-semibold text-white">
+                      {profile.name}
+                    </p>
+                    <p className="text-sm text-white/70">{profile.title}</p>
+                  </div>
+                </motion.div>
+              </div>
+            </FadeIn>
 
-              {/* Who Am I */}
-              <div className="w-full lg:w-2/3 pt-10">
-                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Who Am I</h3>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  I&apos;m a Computer Engineering student at Diponegoro University with a strong
-                  enthusiasm for technological advancements and a constant motivation to learn
-                  new things.
+            <FadeIn direction="left" delay={0.1}>
+              <h3 className="mb-5 font-display text-2xl font-bold sm:text-3xl">
+                Who <span className="text-gradient">I am</span>
+              </h3>
+              <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                <p>
+                  I&apos;m a Computer Engineering graduate from Diponegoro
+                  University (GPA 3.77/4.00) with a constant motivation to learn
+                  everything I can about technological advancement.
                 </p>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  I combine solid technical fundamentals with well-developed communication,
-                  teamwork, and problem-solving skills to deliver value and adapt quickly in
-                  dynamic environments.
+                <p>
+                  Most recently I spent six months at{' '}
+                  <strong className="font-medium text-foreground">
+                    PT. Toyota Motor Manufacturing Indonesia
+                  </strong>{' '}
+                  in the Infra-Security Standardization department, supporting a
+                  company-wide MFA integration and writing secure coding
+                  awareness material — experience that shapes how carefully I
+                  build things today.
                 </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  Beyond academics, I&apos;m actively involved in student organizations where I lead
-                  social programs and human resource development initiatives, helping to create
-                  meaningful impact in my community.
+                <p>
+                  Outside of engineering I lead divisions in student
+                  organizations, where I design programs end to end and keep
+                  teams moving in the same direction.
                 </p>
               </div>
-            </div>
-          </FadeIn>
 
-          {/* What I Do - Centered */}
-          <FadeIn direction="up" delay={0.2} className="mb-12">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-cyan-600 to-emerald-600 bg-clip-text text-transparent">What I Do</h3>
-              <ul className="space-y-3">
-                {[
-                  { color: 'from-blue-600 to-cyan-600', hoverColor: 'group-hover:text-blue-600', title: 'Frontend Development:', desc: 'Building responsive and user-friendly web applications using React, Next.js, and modern CSS frameworks' },
-                  { color: 'from-cyan-600 to-emerald-600', hoverColor: 'group-hover:text-cyan-600', title: 'UI/UX Design:', desc: 'Creating intuitive and visually appealing user interfaces with a focus on accessibility' },
-                  { color: 'from-emerald-600 to-teal-600', hoverColor: 'group-hover:text-emerald-600', title: 'Full-Stack Projects:', desc: 'Developing end-to-end solutions with integration of APIs, databases, and cloud deployment' },
-                  { color: 'from-violet-600 to-purple-600', hoverColor: 'group-hover:text-violet-600', title: 'Community Leadership:', desc: 'Leading teams and organizing programs that drive social impact and professional development' },
-                ].map((item, index) => (
-                  <motion.li 
-                    key={item.title}
-                    className="flex items-start gap-3 group cursor-default"
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      delay: shouldReduceMotion ? 0 : 0.3 + index * 0.1,
-                      duration: 0.4,
-                    }}
-                    whileHover={shouldReduceMotion ? {} : { x: 8 }}
-                  >
-                    <motion.div 
-                      className={cn(`w-2 h-2 bg-gradient-to-r ${item.color} rounded-full mt-2 flex-shrink-0`)}
-                      animate={shouldReduceMotion ? {} : { scale: [1, 1.3, 1] }}
-                      transition={{ 
-                        duration: 2, 
-                        repeat: Infinity, 
-                        delay: index * 0.3,
-                      }}
-                    />
-                    <p className="text-muted-foreground">
-                      <strong className={cn("text-foreground transition-colors", item.hoverColor)}>{item.title}</strong> {item.desc}
-                    </p>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          </FadeIn>
+              <div className="mt-7 flex flex-wrap gap-2">
+                {['Jakarta, Indonesia', 'Diponegoro University', 'Class of 2026'].map(
+                  (chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-full border border-border/70 bg-card/60 px-3.5 py-1.5 text-sm text-muted-foreground backdrop-blur-sm"
+                    >
+                      {chip}
+                    </span>
+                  )
+                )}
+              </div>
+            </FadeIn>
+          </div>
 
-          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.1}>
-            {highlights.map((highlight, index) => (
-              <StaggerItem key={highlight.title}>
-                <TiltCard maxTilt={8} scale={1.03} className="h-full">
-                  <Card className="border-2 hover:border-blue-600 transition-all duration-500 hover:shadow-xl group relative overflow-hidden h-full">
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                        initial={{ x: '-100%' }}
-                        whileHover={shouldReduceMotion ? {} : { x: '100%' }}
-                        transition={{ duration: 0.8, ease: 'easeInOut' }}
-                      />
+          {/* What I do */}
+          <div className="mb-16">
+            <FadeIn className="mb-8 text-center">
+              <h3 className="font-display text-2xl font-bold sm:text-3xl">
+                What <span className="text-gradient">I do</span>
+              </h3>
+            </FadeIn>
+
+            <StaggerContainer className="grid gap-4 sm:grid-cols-2" staggerDelay={0.08}>
+              {whatIDo.map((item, index) => (
+                <StaggerItem key={item.title}>
+                  <SpotlightCard className="h-full p-6">
+                    <div className="flex items-start gap-4">
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 font-mono text-xs font-semibold text-brand-1">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <div>
+                        <h4 className="mb-1.5 font-semibold">{item.title}</h4>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
-                    <CardContent className="p-6 relative z-10">
-                      <motion.div 
-                        className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg"
-                        whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 6 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <highlight.icon className="h-7 w-7 text-white" />
-                      </motion.div>
-                      <h4 className="font-semibold mb-2 group-hover:text-blue-600 transition-colors">{highlight.title}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{highlight.description}</p>
-                    </CardContent>
-                    
-                    {/* Gradient border effect on hover */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10" />
-                  </Card>
-                </TiltCard>
-              </StaggerItem>
-            ))}
+                  </SpotlightCard>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+
+          {/* Highlight cards */}
+          <StaggerContainer
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            staggerDelay={0.08}
+          >
+            {highlights.map((highlight) => {
+              const Icon = iconMap[highlight.icon as keyof typeof iconMap];
+              return (
+                <StaggerItem key={highlight.title}>
+                  <SpotlightCard className="h-full p-6">
+                    <motion.div
+                      whileHover={shouldReduceMotion ? {} : { scale: 1.06, rotate: -4 }}
+                      transition={{ duration: 0.3, ease: ease.out }}
+                      className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-1 to-brand-3 shadow-lg shadow-brand-1/20"
+                    >
+                      <Icon className="h-6 w-6 text-white" />
+                    </motion.div>
+                    <h4 className="mb-1.5 font-semibold">{highlight.title}</h4>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {highlight.description}
+                    </p>
+                  </SpotlightCard>
+                </StaggerItem>
+              );
+            })}
           </StaggerContainer>
         </div>
       </div>

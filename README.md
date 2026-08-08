@@ -103,13 +103,19 @@ http://localhost:3000
 Place your profile photo at `public/images/bravely.png`
 
 ### Personal Information
-Edit the following files to customize your information:
-- `components/sections/hero-section.tsx` - Name, title, social links
-- `components/sections/about-section.tsx` - Bio and background
-- `components/sections/skills-section.tsx` - Skills and certifications
-- `components/sections/projects-section.tsx` - Projects showcase
-- `components/sections/experience-section.tsx` - Work experience
-- `components/sections/contact-section.tsx` - Contact information
+All CV content lives in a single file — edit `lib/data.ts` to update:
+- `profile` - Name, title, contact details, social links, résumé path
+- `stats` - Hero stat strip
+- `projects` - Projects showcase (summary, highlights, tags, links, logo)
+- `experiences` / `education` - Timeline and academic background
+- `skillGroups` / `techMarquee` / `certifications` - Skills section
+- `highlights` / `whatIDo` - About section cards
+
+The section components under `components/sections/` handle layout only.
+
+> Note: `lib/` is included in the Tailwind `content` globs because `data.ts`
+> holds class names (gradients, image backdrops). Keep it there or those
+> utilities get purged.
 
 ### Resume/CV
 Place your CV at `public/resumes/CV Kreatif_Bravely Dirgayuska.pdf`
@@ -138,30 +144,32 @@ npm run typecheck
 
 ## 🎯 Key Features Breakdown
 
-### Floating Bubbles (`components/floating-bubbles.tsx`)
-- 15+ animated bubbles with random positions
-- Smooth floating animations
-- Multiple decorative gradient orbs
+### Motion System (`lib/motion.ts`)
+- Shared easing curves, spring presets, durations, and viewport config
+- Keeps every reveal on the same timing language
+
+### Aurora Background (`components/aurora-background.tsx`)
+- Three slow gradient blooms over a dotted grid with a grain overlay
+- Pure CSS animation — no per-frame JavaScript
+
+### Spotlight Cards (`components/spotlight-card.tsx`)
+- Border and interior glow that tracks the cursor
+- Driven by Framer Motion values, so it never re-renders React
+
+### Scroll Reveals (`components/motion-wrapper.tsx`)
+- `FadeIn`, `ScaleIn`, `StaggerContainer`, `StaggerItem`
+- Blur-and-lift entrances via `whileInView`
+
+### Text Animations (`components/text-animations.tsx`)
+- `WordReveal` word-by-word blur reveal, `Typewriter`, `AnimatedCounter`
 
 ### Glassmorphism
 - Transparent backgrounds with backdrop blur
 - Light/dark mode compatible
 - Used in navigation, cards, and overlays
 
-### Scroll Animations (`hooks/use-scroll-animation.ts`)
-- Intersection Observer-based
-- Triggers when elements enter viewport
-- Smooth, staggered animations
-
-### 3D Card Effects
-- CSS transform perspective
-- Tilt on hover
-- Depth and shadow effects
-
-### Gradient Animations
-- Rotating background gradients
-- Animated text gradients
-- Smooth color transitions
+### Accessibility
+- Every animation respects `prefers-reduced-motion`
 
 ## 📱 Responsive Breakpoints
 

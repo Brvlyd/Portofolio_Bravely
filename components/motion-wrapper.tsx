@@ -1,32 +1,41 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { ReactNode } from 'react';
+import { ease, duration as d, viewport as vp } from '@/lib/motion';
 
-interface MotionWrapperProps {
+interface RevealProps {
   children: ReactNode;
   className?: string;
   delay?: number;
-  direction?: 'up' | 'down' | 'left' | 'right';
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   duration?: number;
   once?: boolean;
+  /** Adds a blur-in on top of the translate. */
+  blur?: boolean;
 }
 
-const directions = {
-  up: { y: 60, x: 0 },
-  down: { y: -60, x: 0 },
-  left: { x: 60, y: 0 },
-  right: { x: -60, y: 0 },
+const offsets = {
+  up: { y: 32, x: 0 },
+  down: { y: -32, x: 0 },
+  left: { x: 40, y: 0 },
+  right: { x: -40, y: 0 },
+  none: { x: 0, y: 0 },
 };
 
+/**
+ * Signature scroll reveal: slight translate + optional blur, on a long
+ * ease-out so it settles rather than snaps.
+ */
 export function FadeIn({
   children,
   className,
   delay = 0,
   direction = 'up',
-  duration = 0.6,
+  duration = d.base,
   once = true,
-}: MotionWrapperProps) {
+  blur = true,
+}: RevealProps) {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
@@ -35,21 +44,10 @@ export function FadeIn({
 
   return (
     <motion.div
-      initial={{ 
-        opacity: 0, 
-        ...directions[direction]
-      }}
-      whileInView={{ 
-        opacity: 1, 
-        x: 0, 
-        y: 0 
-      }}
-      viewport={{ once, margin: '-50px' }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      initial={{ opacity: 0, ...offsets[direction], ...(blur && { filter: 'blur(8px)' }) }}
+      whileInView={{ opacity: 1, x: 0, y: 0, ...(blur && { filter: 'blur(0px)' }) }}
+      viewport={{ ...vp, once }}
+      transition={{ duration, delay, ease: ease.out }}
       className={className}
     >
       {children}
@@ -61,9 +59,9 @@ export function ScaleIn({
   children,
   className,
   delay = 0,
-  duration = 0.6,
+  duration = d.base,
   once = true,
-}: Omit<MotionWrapperProps, 'direction'>) {
+}: Omit<RevealProps, 'direction' | 'blur'>) {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
@@ -72,14 +70,10 @@ export function ScaleIn({
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.94 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once, margin: '-50px' }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      viewport={{ ...vp, once }}
+      transition={{ duration, delay, ease: ease.out }}
       className={className}
     >
       {children}
@@ -91,12 +85,14 @@ interface StaggerContainerProps {
   children: ReactNode;
   className?: string;
   staggerDelay?: number;
+  delayChildren?: number;
 }
 
 export function StaggerContainer({
   children,
   className,
-  staggerDelay = 0.1,
+  staggerDelay = 0.08,
+  delayChildren = 0,
 }: StaggerContainerProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -108,14 +104,10 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={vp}
       variants={{
         hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
+        visible: { transition: { staggerChildren: staggerDelay, delayChildren } },
       }}
       className={className}
     >
@@ -123,6 +115,16 @@ export function StaggerContainer({
     </motion.div>
   );
 }
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.55, ease: ease.out },
+  },
+};
 
 export function StaggerItem({
   children,
@@ -138,49 +140,7 @@ export function StaggerItem({
   }
 
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.5,
-            ease: [0.25, 0.1, 0.25, 1],
-          },
-        },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-interface ParallaxProps {
-  children: ReactNode;
-  className?: string;
-  speed?: number;
-}
-
-export function Parallax({ children, className, speed = 0.5 }: ParallaxProps) {
-  const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
-  return (
-    <motion.div
-      initial={{ y: 0 }}
-      whileInView={{ y: speed * -50 }}
-      viewport={{ once: false }}
-      transition={{
-        duration: 0.8,
-        ease: 'linear',
-      }}
-      className={className}
-    >
+    <motion.div variants={itemVariants} className={className}>
       {children}
     </motion.div>
   );

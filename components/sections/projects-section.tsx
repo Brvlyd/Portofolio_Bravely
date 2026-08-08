@@ -1,215 +1,133 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { ArrowUpRight, Github } from 'lucide-react';
+import { SectionHeading } from '@/components/section-heading';
+import { SpotlightCard } from '@/components/spotlight-card';
+import { StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github } from 'lucide-react';
+import { projects, type Project } from '@/lib/data';
+import { ease } from '@/lib/motion';
 import { cn } from '@/lib/utils';
-import { useScrollAnimation } from '@/hooks/use-scroll-animation';
-import { TiltCard } from '@/components/tilt-card';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
 
-const projects = [
-  {
-    title: 'SITOMAS Kresno',
-    description: 'A CLI tool that automates converting Figma designs into React/Next.js TypeScript components, handling design parsing, style extraction (CSS/Tailwind), and asset management through the Figma API. Built as a production-ready Next.js app with full type safety and 27 passing Jest unit tests.',
-    tags: ['CLI Tool', 'Figma API', 'Next.js', 'TypeScript', 'Jest'],
-    github: 'https://github.com/Brvlyd/kresno',
-    demo: 'https://sitomaskresno.vercel.app',
-    image: '/images/logo-kresno.png',
-  },
-  {
-    title: 'Bearions',
-    description: 'A full-stack e-commerce platform for a clothing brand using Next.js 16, TypeScript, and Supabase, with a customer-facing catalog featuring search/filtering and image carousels, plus an admin dashboard for product and inventory management. Implements role-based access control with PostgreSQL Row-Level Security and Supabase Auth.',
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL RLS', 'E-commerce'],
-    github: 'https://github.com/Brvlyd/bearions',
-    image: '/images/Bearions.jpg',
-  },
-  {
-    title: 'November Coffee',
-    description: 'A full-stack cafe management system (TypeScript/Next.js + Supabase) with multi-shift attendance tracking, automated payroll, and real-time inventory, deployed on Vercel with automated cron jobs. Includes AI-powered OCR receipt processing and a polished Tailwind CSS + Framer Motion admin UI.',
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'AI/OCR', 'Tailwind CSS'],
-    github: 'https://github.com/Brvlyd/november-coffee',
-    demo: 'https://november-coffee.vercel.app',
-    image: '/images/november_logo.png',
-  },
-  {
-    title: 'RetenSYNC',
-    description: 'A live cloud application built with Next.js featuring static typing for correctness and safer refactors. Deployed on Vercel with configured builds, environment variables, and automatic preview/production releases on push.',
-    tags: ['Next.js', 'TypeScript', 'Vercel', 'Cloud Deployment', 'GitHub'],
-    github: 'https://github.com/Brvlyd/RetenSYNC',
-    demo: 'https://retensync.vercel.app/auth/login',
-    image: '/images/RetenSYNC.png',
-  },
-  {
-    title: 'MarvelVerse',
-    description: 'A user-centered Marvel-themed mobile app with visually engaging UI built in React Native. Features API integration to deliver interactive, personalized content with high accessibility and responsiveness.',
-    tags: ['React Native', 'API Integration', 'UI/UX', 'Mobile Development'],
-    github: 'https://github.com/Brvlyd/MarvelVerse',
-    image: '/images/marvel.png',
-  },
-  {
-    title: 'Pekalongan Government Website Redesign',
-    description: 'Complete redesign and frontend implementation for the Pekalongan Government website using HTML and Tailwind CSS. Integrated with Laravel backend and PHPMyAdmin database, managed through GitHub.',
-    tags: ['HTML', 'Tailwind CSS', 'Laravel', 'UI/UX Design', 'Government Project'],
-    github: 'https://github.com/dzikrirazzan/diskominfo_pekalongan',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fe/Lambang_Kota_Pekalongan.png',
-  },
-];
-
-export function ProjectsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isVisible = useScrollAnimation(sectionRef);
+function ProjectCard({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section ref={sectionRef} id="projects" className="py-20 bg-secondary/30 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div 
-          className="absolute top-40 left-20 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-20 right-20 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, -25, 0],
-            y: [0, 15, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+    <SpotlightCard className="flex h-full flex-col">
+      {/* Media */}
+      <div className="p-3 pb-0">
+        <div
+          className={cn(
+            'relative aspect-[16/10] overflow-hidden rounded-xl border border-border/50',
+            project.imageBg ??
+              'bg-gradient-to-br from-muted/80 to-muted/40'
+          )}
+        >
+          <motion.img
+            src={project.image}
+            alt={`${project.title} logo`}
+            loading="lazy"
+            className="h-full w-full object-contain p-8"
+            whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+            transition={{ duration: 0.45, ease: ease.out }}
+          />
+
+          {project.demo && (
+            <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              Live
+            </span>
+          )}
+        </div>
       </div>
 
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-6 pt-5">
+        <h3 className="font-display text-xl font-bold transition-colors group-hover:text-brand-1">
+          {project.title}
+        </h3>
+
+        <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+          {project.summary}
+        </p>
+
+        <ul className="mt-4 space-y-2">
+          {project.highlights.map((highlight) => (
+            <li key={highlight} className="flex gap-2.5 text-sm text-muted-foreground">
+              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-brand-2" />
+              <span className="leading-relaxed">{highlight}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-md border border-border/60 bg-background/50 px-2 py-1 text-[11px] font-medium text-muted-foreground"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Actions pinned to the bottom so cards line up */}
+        <div className="mt-6 flex gap-2 pt-1">
+          {project.github && (
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="flex-1 rounded-lg border-border/70 bg-background/50 transition-colors hover:border-brand-1/50"
+            >
+              <a href={project.github} target="_blank" rel="noopener noreferrer">
+                <Github className="mr-1.5 h-3.5 w-3.5" />
+                Code
+              </a>
+            </Button>
+          )}
+          {project.demo && (
+            <Button
+              size="sm"
+              asChild
+              className="group/btn flex-1 rounded-lg bg-gradient-to-r from-brand-1 to-brand-3 text-white shadow-sm transition-shadow hover:shadow-md hover:shadow-brand-1/25"
+            >
+              <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                Visit
+                <ArrowUpRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              </a>
+            </Button>
+          )}
+        </div>
+      </div>
+    </SpotlightCard>
+  );
+}
+
+export function ProjectsSection() {
+  return (
+    <section id="projects" className="relative py-24 sm:py-32">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Featured{' '}
-              <motion.span 
-                className="bg-gradient-to-r from-blue-600 via-cyan-600 to-violet-600 bg-clip-text text-transparent"
-                style={{ backgroundSize: '200% 200%' }}
-                animate={shouldReduceMotion ? {} : {
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              >
-                Projects
-              </motion.span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              A showcase of my recent work demonstrating technical skills and problem-solving abilities
-            </p>
-          </FadeIn>
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading
+            eyebrow="Projects"
+            title="Featured"
+            accent="work"
+            description="Production applications and design work — from a gold jewelry POS to a full e-commerce platform."
+            className="mb-16"
+          />
 
-          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" staggerDelay={0.15}>
-            {projects.map((project, index) => (
-              <StaggerItem key={project.title}>
-                <TiltCard maxTilt={8} scale={1.02} className="h-full">
-                  <Card className="flex flex-col relative overflow-hidden hover:shadow-2xl transition-all duration-500 group border-2 h-full">
-                    {/* Shimmer effect on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                        initial={{ x: '-100%' }}
-                        whileHover={shouldReduceMotion ? {} : { x: '100%' }}
-                        transition={{ duration: 0.8, ease: 'easeInOut' }}
-                      />
-                    </div>
-
-                    <CardHeader className="relative">
-                      <motion.div 
-                        className="h-52 rounded-xl mb-4 relative overflow-hidden shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
-                        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-contain p-4"
-                          onError={(e) => {
-                            // Fallback to gradient background if image fails to load
-                            e.currentTarget.style.display = 'none';
-                            const parent = e.currentTarget.parentElement;
-                            if (parent) {
-                              parent.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-cyan-500');
-                            }
-                          }}
-                        />
-
-                        {/* Animated gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </motion.div>
-                      <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{project.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag, tagIndex) => (
-                          <motion.div
-                            key={tag}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 + tagIndex * 0.05 }}
-                          >
-                            <Badge 
-                              variant="secondary" 
-                              className="text-xs hover:scale-110 transition-transform cursor-default hover:bg-blue-600/20"
-                            >
-                              {tag}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="gap-2">
-                      {project.github && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 glass dark:glass-dark hover:scale-105 transition-all duration-300"
-                          asChild
-                        >
-                          <a href={project.github} target="_blank" rel="noopener noreferrer">
-                            <Github className="mr-2 h-4 w-4" />
-                            Code
-                          </a>
-                        </Button>
-                      )}
-                      {project.demo && (
-                        <Button
-                          size="sm"
-                          className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 hover:scale-105 transition-all duration-300 shadow-lg"
-                          asChild
-                        >
-                          <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Demo
-                          </a>
-                        </Button>
-                      )}
-                    </CardFooter>
-                  </Card>
-                </TiltCard>
+          <StaggerContainer
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            staggerDelay={0.1}
+          >
+            {projects.map((project) => (
+              <StaggerItem key={project.title} className="h-full">
+                <ProjectCard project={project} />
               </StaggerItem>
             ))}
           </StaggerContainer>

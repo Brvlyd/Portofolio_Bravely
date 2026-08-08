@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { MagneticButton } from '@/components/magnetic-button';
+import { ease, spring } from '@/lib/motion';
+import { profile } from '@/lib/data';
 
 const navItems = [
   { href: '#home', label: 'Home' },
@@ -21,21 +22,18 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
 
   const handleScroll = useCallback(() => {
-    setIsScrolled(window.scrollY > 50);
-    
-    // Update active section based on scroll position
-    const sections = navItems.map(item => item.href.slice(1));
-    const scrollPosition = window.scrollY + 100;
-    
-    for (let i = sections.length - 1; i >= 0; i--) {
-      const section = document.getElementById(sections[i]);
+    setIsScrolled(window.scrollY > 24);
+
+    const scrollPosition = window.scrollY + 120;
+    for (let i = navItems.length - 1; i >= 0; i--) {
+      const section = document.getElementById(navItems[i].href.slice(1));
       if (section && section.offsetTop <= scrollPosition) {
-        setActiveSection(sections[i]);
+        setActiveSection(navItems[i].href.slice(1));
         break;
       }
     }
@@ -43,163 +41,119 @@ export function Navigation() {
 
   useEffect(() => {
     setMounted(true);
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  // Prevent the page from scrolling behind the mobile overlay.
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    }
+    setIsMobileMenuOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (!mounted) return null;
+  const isDark = resolvedTheme === 'dark';
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          isScrolled
-            ? 'glass dark:glass-dark shadow-xl border-b border-white/20'
-            : 'bg-transparent'
-        )}
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: ease.out }}
+        className="fixed inset-x-0 top-0 z-50 px-4 pt-3"
       >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <MagneticButton strength={0.2}>
-              <motion.button
-                onClick={() => scrollToSection('#home')}
-                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                BD
-              </motion.button>
-            </MagneticButton>
+        <nav
+          className={cn(
+            'mx-auto flex h-14 max-w-5xl items-center justify-between rounded-full px-3 transition-all duration-500 sm:px-4',
+            isScrolled
+              ? 'glass-strong shadow-lg shadow-black/5'
+              : 'border border-transparent bg-transparent'
+          )}
+        >
+          <button
+            onClick={() => scrollToSection('#home')}
+            className="group flex items-center gap-2.5 rounded-full pl-1 pr-3 text-left"
+            aria-label="Back to top"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-1 to-brand-3 text-xs font-bold text-white shadow-sm">
+              {profile.initials}
+            </span>
+            <span className="hidden text-sm font-semibold tracking-tight transition-colors group-hover:text-brand-1 sm:block">
+              {profile.name.split(' ')[0]}
+            </span>
+          </button>
 
-            <div className="hidden md:flex items-center gap-1">
-              {navItems.map((item, index) => (
-                <motion.div
+          <div className="hidden items-center gap-0.5 md:flex">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.slice(1);
+              return (
+                <button
                   key={item.href}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ 
-                    delay: shouldReduceMotion ? 0 : 0.1 + index * 0.05,
-                    duration: 0.3,
-                  }}
+                  onClick={() => scrollToSection(item.href)}
+                  className={cn(
+                    'relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+                    isActive
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
                 >
-                  <MagneticButton strength={0.15}>
-                    <button
-                      onClick={() => scrollToSection(item.href)}
-                      className={cn(
-                        "relative px-4 py-2 text-sm font-medium transition-colors rounded-lg",
-                        activeSection === item.href.slice(1)
-                          ? "text-blue-600 dark:text-blue-400"
-                          : "hover:text-blue-600 dark:hover:text-blue-400"
-                      )}
-                    >
-                      {item.label}
-                      {activeSection === item.href.slice(1) && (
-                        <motion.div
-                          layoutId="activeSection"
-                          className="absolute inset-0 bg-blue-500/10 rounded-lg -z-10"
-                          transition={shouldReduceMotion ? { duration: 0 } : {
-                            type: 'spring',
-                            stiffness: 380,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-                    </button>
-                  </MagneticButton>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <MagneticButton strength={0.2}>
-                <motion.div
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="rounded-full"
-                  >
-                    <AnimatePresence mode="wait">
-                      {theme === 'dark' ? (
-                        <motion.div
-                          key="sun"
-                          initial={{ rotate: -90, opacity: 0 }}
-                          animate={{ rotate: 0, opacity: 1 }}
-                          exit={{ rotate: 90, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Sun className="h-5 w-5" />
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="moon"
-                          initial={{ rotate: 90, opacity: 0 }}
-                          animate={{ rotate: 0, opacity: 1 }}
-                          exit={{ rotate: -90, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Moon className="h-5 w-5" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </Button>
-                </motion.div>
-              </MagneticButton>
-
-              <motion.div
-                whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
-              >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden rounded-full"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                >
-                  <AnimatePresence mode="wait">
-                    {isMobileMenuOpen ? (
-                      <motion.div
-                        key="close"
-                        initial={{ rotate: -90, opacity: 0 }}
-                        animate={{ rotate: 0, opacity: 1 }}
-                        exit={{ rotate: 90, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <X className="h-5 w-5" />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="menu"
-                        initial={{ rotate: 90, opacity: 0 }}
-                        animate={{ rotate: 0, opacity: 1 }}
-                        exit={{ rotate: -90, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Menu className="h-5 w-5" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </Button>
-              </motion.div>
-            </div>
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 -z-10 rounded-full bg-foreground/[0.07] ring-1 ring-inset ring-border/60"
+                      transition={shouldReduceMotion ? { duration: 0 } : spring.snappy}
+                    />
+                  )}
+                  {item.label}
+                </button>
+              );
+            })}
           </div>
-        </div>
-      </motion.nav>
+
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              className="rounded-full"
+              aria-label="Toggle theme"
+            >
+              {mounted && (
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={isDark ? 'sun' : 'moon'}
+                    initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
+                    transition={{ duration: 0.22, ease: ease.out }}
+                    className="flex"
+                  >
+                    {isDark ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+                  </motion.span>
+                </AnimatePresence>
+              )}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full md:hidden"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+        </nav>
+      </motion.header>
 
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -207,40 +161,35 @@ export function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md md:hidden pt-16"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-40 bg-background/90 pt-24 backdrop-blur-xl md:hidden"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="container mx-auto px-4 py-8"
-            >
-              <div className="flex flex-col gap-2">
-                {navItems.map((item, index) => (
-                  <motion.button
-                    key={item.href}
-                    onClick={() => scrollToSection(item.href)}
-                    className={cn(
-                      "text-lg font-medium transition-all text-left py-3 px-4 rounded-lg",
-                      activeSection === item.href.slice(1)
-                        ? "text-blue-600 dark:text-blue-400 bg-blue-500/10"
-                        : "hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-500/5"
-                    )}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ 
-                      delay: shouldReduceMotion ? 0 : 0.1 + index * 0.05,
-                      duration: 0.3,
-                    }}
-                    whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                  >
-                    {item.label}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
+            <div className="container mx-auto flex flex-col gap-1 px-6">
+              {navItems.map((item, index) => (
+                <motion.button
+                  key={item.href}
+                  onClick={() => scrollToSection(item.href)}
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: shouldReduceMotion ? 0 : 0.06 + index * 0.05,
+                    duration: 0.4,
+                    ease: ease.out,
+                  }}
+                  className={cn(
+                    'flex items-center justify-between rounded-xl px-4 py-4 text-left text-lg font-medium transition-colors',
+                    activeSection === item.href.slice(1)
+                      ? 'bg-foreground/[0.06] text-brand-1'
+                      : 'text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground'
+                  )}
+                >
+                  {item.label}
+                  <span className="font-mono text-xs opacity-40">
+                    0{index + 1}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

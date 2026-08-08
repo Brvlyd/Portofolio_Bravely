@@ -1,330 +1,272 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
+import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Download, Github, Linkedin, Mail, Sparkles, Code2, Rocket } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { MagneticButton } from '@/components/magnetic-button';
-import { ScrollIndicator } from '@/components/scroll-indicator';
-import { Typewriter } from '@/components/text-animations';
+import { Typewriter, WordReveal } from '@/components/text-animations';
+import { Marquee } from '@/components/marquee';
+import { profile } from '@/lib/data';
+import { ease, spring } from '@/lib/motion';
 
 const ThreeHeroBackground = dynamic(
-  () => import('@/components/three-hero-background').then((mod) => mod.ThreeHeroBackground),
+  () => import('@/components/three-hero-background').then((m) => m.ThreeHeroBackground),
   { ssr: false }
 );
 
+const socials = [
+  { href: profile.linkedin, icon: Linkedin, label: 'LinkedIn' },
+  { href: profile.github, icon: Github, label: 'GitHub' },
+  { href: `mailto:${profile.email}`, icon: Mail, label: 'Email' },
+];
+
 export function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
-  
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+
+  // Cursor spotlight driven by motion values so it never re-renders React.
+  const pointerX = useMotionValue(-9999);
+  const pointerY = useMotionValue(-9999);
+  const smoothX = useSpring(pointerX, spring.soft);
+  const smoothY = useSpring(pointerY, spring.soft);
+  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-2) / 0.14), transparent 70%)`;
 
   useEffect(() => {
-    setIsVisible(true);
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!shouldReduceMotion) {
-        setMousePosition({ x: e.clientX, y: e.clientY });
-      }
+    if (shouldReduceMotion) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = sectionRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      pointerX.set(e.clientX - rect.left);
+      pointerY.set(e.clientY - rect.top);
     };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [shouldReduceMotion]);
 
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
+  }, [pointerX, pointerY, shouldReduceMotion]);
+
+  const scrollTo = (selector: string) => {
+    document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  };
-
-  const MotionWrapper = shouldReduceMotion ? 'div' : motion.div;
 
   return (
     <section
       ref={sectionRef}
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-16 pt-28"
     >
-      {/* Animated gradient background */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 dark:from-blue-950/20 dark:via-cyan-950/20 dark:to-purple-950/20"
-        style={{ 
-          backgroundSize: '400% 400%',
-          y: shouldReduceMotion ? 0 : y,
-        }}
-        animate={shouldReduceMotion ? {} : {
-          backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
+      {/* Blueprint grid */}
+      <div aria-hidden className="bg-grid mask-fade absolute inset-0 opacity-[0.55]" />
+
+      {/* 3D depth layer — particles, wireframe shells and distorted orbs */}
+      {!shouldReduceMotion && (
+        <div aria-hidden className="absolute inset-0 opacity-80">
+          <ThreeHeroBackground />
+        </div>
+      )}
+
+      {/* Keeps the headline legible over the 3D layer */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_45%,hsl(var(--background)/0.75),transparent_75%)]"
       />
 
-      {/* 3D floating shapes accent */}
-      {!shouldReduceMotion && <ThreeHeroBackground />}
-
-      {/* Animated orbs with parallax */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
-          className="absolute -top-1/2 -left-1/4 w-96 h-96 bg-blue-500/30 dark:bg-blue-500/10 rounded-full blur-3xl will-change-transform"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, 30, 0],
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-cyan-500/30 dark:bg-cyan-500/10 rounded-full blur-3xl will-change-transform"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, -20, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/4 right-1/4 w-72 h-72 bg-violet-500/30 dark:bg-violet-500/10 rounded-full blur-3xl will-change-transform"
-          animate={shouldReduceMotion ? {} : {
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-pink-500/30 dark:bg-pink-500/10 rounded-full blur-3xl will-change-transform"
-          animate={shouldReduceMotion ? {} : {
-            x: [0, 25, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      </div>
-
-      {/* Mouse follower effect */}
+      {/* Cursor spotlight */}
       {!shouldReduceMotion && (
-        <motion.div 
-          className="absolute w-96 h-96 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl pointer-events-none will-change-transform"
-          animate={{
-            x: mousePosition.x - 192,
-            y: mousePosition.y - 192,
-          }}
-          transition={{
-            type: 'spring',
-            damping: 30,
-            stiffness: 200,
-          }}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: spotlight }}
         />
       )}
 
-      <motion.div 
-        className="container mx-auto px-4 relative z-10"
-        style={{ opacity: shouldReduceMotion ? 1 : opacity }}
+      <motion.div
+        style={
+          shouldReduceMotion ? undefined : { y: contentY, opacity: contentOpacity }
+        }
+        className="container relative z-10 mx-auto max-w-5xl"
       >
-        <MotionWrapper
-          className="max-w-4xl mx-auto text-center"
-          variants={containerVariants}
+        <motion.div
           initial="hidden"
-          animate={isVisible ? 'visible' : 'hidden'}
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+          }}
+          className="flex flex-col items-center text-center"
         >
-          {/* Badge with animation */}
-          <MotionWrapper variants={itemVariants} className="mb-6">
-            <motion.span
-              className="inline-flex items-center gap-2 px-5 py-2.5 glass dark:glass-dark text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium"
-              whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-            >
-              <Sparkles className="w-4 h-4" />
-              Welcome to my portfolio
-              <Sparkles className="w-4 h-4" />
-            </motion.span>
-          </MotionWrapper>
+          {/* Availability badge */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 16, filter: 'blur(6px)' },
+              visible: {
+                opacity: 1,
+                y: 0,
+                filter: 'blur(0px)',
+                transition: { duration: 0.6, ease: ease.out },
+              },
+            }}
+            className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-sm backdrop-blur-md"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="font-medium text-muted-foreground">
+              Open to opportunities
+            </span>
+            <span className="h-3.5 w-px bg-border" />
+            <span className="flex items-center gap-1 text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5" />
+              {profile.location}
+            </span>
+          </motion.div>
 
-          {/* Main heading with staggered animation */}
-          <MotionWrapper variants={itemVariants}>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-              Hi! I&apos;m{' '}
-              <span className="relative inline-block">
-                <motion.span 
-                  className="bg-gradient-to-r from-blue-600 via-cyan-600 to-violet-600 bg-clip-text text-transparent"
-                  style={{ backgroundSize: '200% 200%' }}
-                  animate={shouldReduceMotion ? {} : {
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                >
-                  Bravely Dirgayuska
-                </motion.span>
-                <motion.span 
-                  className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 via-cyan-600/20 to-violet-600/20 blur-2xl -z-10"
-                  animate={shouldReduceMotion ? {} : { opacity: [0.5, 0.8, 0.5] }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                />
-              </span>
-            </h1>
-          </MotionWrapper>
-
-          {/* Subtitle with typewriter effect */}
-          <MotionWrapper variants={itemVariants} className="flex items-center justify-center gap-3 text-xl md:text-2xl text-muted-foreground mb-8 flex-wrap">
-            <motion.div
-              animate={shouldReduceMotion ? {} : { y: [0, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <Code2 className="w-6 h-6 text-blue-600" />
-            </motion.div>
-            <Typewriter 
-              words={[
-                'Computer Engineering Student',
-                'Software Developer',
-                'UI/UX Enthusiast',
-                'Problem Solver',
-              ]}
-              className="font-medium"
+          {/* Name */}
+          <h1 className="mb-5 font-display text-[clamp(2.5rem,8vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight">
+            <WordReveal
+              text="Hi, I'm"
+              animateOnMount
+              delay={0.2}
+              className="justify-center text-muted-foreground"
             />
-            <motion.div
-              animate={shouldReduceMotion ? {} : { y: [0, 5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-            >
-              <Rocket className="w-6 h-6 text-cyan-600" />
-            </motion.div>
-          </MotionWrapper>
+            <br />
+            <WordReveal
+              text={profile.name}
+              animateOnMount
+              delay={0.4}
+              className="justify-center"
+              wordClassName="text-gradient-animate"
+            />
+          </h1>
 
-          <MotionWrapper variants={itemVariants}>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-              Passionate about technological advancement and continuous learning.
-              I combine solid technical fundamentals with strong communication, teamwork,
-              and problem-solving skills to deliver value in dynamic environments.
-            </p>
-          </MotionWrapper>
+          {/* Role typewriter */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 14 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: ease.out, delay: 0.75 },
+              },
+            }}
+            className="mb-6 flex min-h-[2rem] items-center justify-center text-lg font-medium text-muted-foreground sm:text-xl md:text-2xl"
+          >
+            <Typewriter words={profile.roles} className="text-foreground" />
+          </motion.div>
 
-          {/* CTA Buttons with magnetic effect */}
-          <MotionWrapper variants={itemVariants} className="flex flex-wrap items-center justify-center gap-4 mb-12">
-            <MagneticButton strength={0.2}>
+          {/* Summary */}
+          <motion.p
+            variants={{
+              hidden: { opacity: 0, y: 16 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: ease.out, delay: 0.85 },
+              },
+            }}
+            className="mb-10 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
+          >
+            {profile.summary}
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 18 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: ease.out, delay: 0.95 },
+              },
+            }}
+            className="mb-10 flex flex-wrap items-center justify-center gap-3"
+          >
+            <MagneticButton strength={0.25}>
               <Button
                 size="lg"
-                onClick={scrollToContact}
-                className="relative group bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => scrollTo('#projects')}
+                className="group h-12 rounded-full bg-gradient-to-r from-brand-1 to-brand-3 px-7 text-white shadow-lg shadow-brand-1/20 transition-shadow hover:shadow-xl hover:shadow-brand-1/30"
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md" />
-                <Mail className="mr-2 h-5 w-5 relative z-10" />
-                <span className="relative z-10">Get In Touch</span>
+                View My Work
+                <ArrowDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-0.5" />
               </Button>
             </MagneticButton>
-            <MagneticButton strength={0.2}>
+
+            <MagneticButton strength={0.25}>
               <Button
                 size="lg"
                 variant="outline"
                 asChild
-                className="glass dark:glass-dark transition-all duration-300 hover:shadow-lg border-2"
+                className="h-12 rounded-full border-border/70 bg-card/60 px-7 backdrop-blur-md transition-colors hover:border-brand-1/50 hover:bg-card/80"
               >
-                <a href="/resumes/CV Kreatif_Bravely Dirgayuska.pdf" download>
-                  <Download className="mr-2 h-5 w-5" />
+                <a href={profile.resume} download={profile.resumeFilename}>
+                  <Download className="mr-2 h-4 w-4" />
                   Download CV
                 </a>
               </Button>
             </MagneticButton>
-          </MotionWrapper>
+          </motion.div>
 
-          {/* Social Links with magnetic effect */}
-          <MotionWrapper variants={itemVariants} className="flex items-center justify-center gap-6 mb-12">
-            {[
-              { href: 'https://www.linkedin.com/in/bravelyd/', icon: Linkedin, color: 'blue', rotate: -6 },
-              { href: 'https://github.com/Brvlyd', icon: Github, color: 'gray', rotate: 0 },
-              { href: 'mailto:bravelydirgayuska@gmail.com', icon: Mail, color: 'rose', rotate: 6 },
-            ].map((social, index) => (
-              <MagneticButton key={social.href} strength={0.3}>
+          {/* Socials */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 18 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: ease.out, delay: 1.05 },
+              },
+            }}
+            className="flex items-center gap-3"
+          >
+            {socials.map((social) => (
+              <MagneticButton key={social.label} strength={0.35}>
                 <motion.a
                   href={social.href}
                   target={social.href.startsWith('http') ? '_blank' : undefined}
                   rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className={cn(
-                    "group relative w-16 h-16 flex items-center justify-center rounded-full glass dark:glass-dark transition-all duration-300 hover:shadow-2xl border-2 border-transparent hover:border-white/30",
-                    social.color === 'blue' && 'hover:-rotate-6',
-                    social.color === 'rose' && 'hover:rotate-6'
-                  )}
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.15 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+                  aria-label={social.label}
+                  whileHover={shouldReduceMotion ? {} : { y: -4 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.94 }}
+                  transition={{ duration: 0.2, ease: ease.out }}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-brand-1/50 hover:text-brand-1"
                 >
-                  <social.icon className={cn(
-                    "h-7 w-7 relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    social.color === 'blue' && 'text-blue-600 dark:text-blue-400',
-                    social.color === 'gray' && 'text-gray-800 dark:text-gray-200',
-                    social.color === 'rose' && 'text-rose-600 dark:text-rose-400'
-                  )} />
-                  <div className={cn(
-                    "absolute inset-0 opacity-0 group-hover:opacity-30 rounded-full transition-opacity duration-300",
-                    social.color === 'blue' && 'bg-gradient-to-br from-blue-500 to-cyan-500',
-                    social.color === 'gray' && 'bg-gradient-to-br from-gray-700 to-gray-900',
-                    social.color === 'rose' && 'bg-gradient-to-br from-rose-500 to-pink-500'
-                  )} />
+                  <social.icon className="h-5 w-5" />
                 </motion.a>
               </MagneticButton>
             ))}
-          </MotionWrapper>
+          </motion.div>
 
-          {/* Scroll indicator */}
-          <MotionWrapper variants={itemVariants}>
-            <ScrollIndicator targetSection="#about" className="mt-8" />
-          </MotionWrapper>
-        </MotionWrapper>
+        </motion.div>
+      </motion.div>
+
+      {/* Tech stack ticker */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.15, ease: ease.out }}
+        className="relative z-10 mt-16 w-full sm:mt-20"
+      >
+        <p className="mb-5 text-center text-xs uppercase tracking-[0.22em] text-muted-foreground">
+          Tools I build with
+        </p>
+        <Marquee />
       </motion.div>
     </section>
   );
