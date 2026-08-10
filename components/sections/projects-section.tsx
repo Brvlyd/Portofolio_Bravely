@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Github } from 'lucide-react';
+import { ArrowUpRight, CircuitBoard, Github } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
@@ -24,14 +24,29 @@ function ProjectCard({ project }: { project: Project }) {
               'bg-gradient-to-br from-muted/80 to-muted/40'
           )}
         >
-          <motion.img
-            src={project.image}
-            alt={`${project.title} logo`}
-            loading="lazy"
-            className="h-full w-full object-contain p-8"
-            whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
-            transition={{ duration: 0.45, ease: ease.out }}
-          />
+          {project.image ? (
+            <motion.img
+              src={project.image}
+              alt={`${project.title} logo`}
+              loading="lazy"
+              className="h-full w-full object-contain p-8"
+              whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+              transition={{ duration: 0.45, ease: ease.out }}
+            />
+          ) : (
+            /* Hardware project with no logo — a mark stands in for one. */
+            <motion.div
+              className="flex h-full w-full items-center justify-center"
+              whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+              transition={{ duration: 0.45, ease: ease.out }}
+            >
+              <CircuitBoard className="h-16 w-16 text-brand-1/70" strokeWidth={1.2} />
+            </motion.div>
+          )}
+
+          <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+            {project.year}
+          </span>
 
           {project.demo && (
             <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
@@ -50,6 +65,9 @@ function ProjectCard({ project }: { project: Project }) {
         <h3 className="font-display text-xl font-bold transition-colors group-hover:text-brand-1">
           {project.title}
         </h3>
+        {project.kind && (
+          <p className="mt-1 text-sm font-medium text-brand-2">{project.kind}</p>
+        )}
 
         <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
           {project.summary}
@@ -117,7 +135,7 @@ export function ProjectsSection() {
             eyebrow="Projects"
             title="Featured"
             accent="work"
-            description="Production applications and design work — from a gold jewelry POS to a full e-commerce platform."
+            description="Production software in daily commercial use, plus embedded hardware — from a gold jewelry POS to an engine data logger."
             className="mb-16"
           />
 

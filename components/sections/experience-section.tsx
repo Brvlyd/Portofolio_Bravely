@@ -1,11 +1,16 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Building2, GraduationCap, Sparkles, Users } from 'lucide-react';
+import { Building2, GraduationCap, Plus, Users } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { education, experiences, type Experience } from '@/lib/data';
+import {
+  additionalInvolvement,
+  education,
+  experiences,
+  type Experience,
+} from '@/lib/data';
 import { ease, viewport } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
@@ -19,14 +24,9 @@ const kindMeta: Record<
     className: 'from-brand-1 to-brand-3',
   },
   organization: {
-    label: 'Organization',
+    label: 'Leadership',
     icon: Users,
     className: 'from-emerald-500 to-teal-400',
-  },
-  experience: {
-    label: 'Experience',
-    icon: Sparkles,
-    className: 'from-amber-500 to-orange-400',
   },
 };
 
@@ -68,6 +68,9 @@ function TimelineEntry({ item, index }: { item: Experience; index: number }) {
         <p className="mt-0.5 text-sm font-medium text-brand-1">
           {item.organization}
         </p>
+        {item.note && (
+          <p className="mt-0.5 text-sm italic text-muted-foreground">{item.note}</p>
+        )}
 
         <ul className="mt-3 space-y-2">
           {item.points.map((point) => (
@@ -117,6 +120,27 @@ export function ExperienceSection() {
                   <TimelineEntry key={item.role} item={item} index={index} />
                 ))}
               </ol>
+
+              {/* Smaller roles, grouped as on the CV */}
+              <FadeIn className="pl-12">
+                <div className="rounded-2xl border border-border/70 bg-card/50 p-5 backdrop-blur-sm">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Plus className="h-4 w-4 text-muted-foreground" />
+                    <h4 className="text-sm font-semibold">Additional involvement</h4>
+                  </div>
+                  <ul className="space-y-2">
+                    {additionalInvolvement.map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-2.5 text-sm text-muted-foreground"
+                      >
+                        <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/50" />
+                        <span className="leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </FadeIn>
             </div>
 
             {/* Education + achievements */}
@@ -135,10 +159,10 @@ export function ExperienceSection() {
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <h4 className="font-display font-semibold leading-snug">
-                            {edu.degree}
+                            {edu.institution}
                           </h4>
                           <p className="mt-1 text-sm font-medium text-emerald-500 dark:text-emerald-400">
-                            {edu.institution}
+                            {edu.degree}
                           </p>
                           <p className="mt-1 text-sm text-muted-foreground">
                             {edu.location}
@@ -148,15 +172,22 @@ export function ExperienceSection() {
                           {edu.period}
                         </span>
                       </div>
+
                       <p className="mt-4 inline-flex rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-400/10 px-3 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
                         {edu.score}
                       </p>
+
+                      {edu.project && (
+                        <p className="mt-4 border-t border-border/60 pt-4 text-sm leading-relaxed text-muted-foreground">
+                          {edu.project}
+                        </p>
+                      )}
                     </SpotlightCard>
                   </StaggerItem>
                 ))}
               </StaggerContainer>
 
-              <FadeIn delay={0.2} className="mt-6">
+              <FadeIn delay={0.2} className="mt-4">
                 <div className="overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-brand-1/[0.07] via-transparent to-brand-3/[0.07] p-6 backdrop-blur-sm">
                   <h4 className="mb-4 font-display font-semibold">
                     Key Achievements
@@ -164,9 +195,9 @@ export function ExperienceSection() {
                   <ul className="space-y-3">
                     {[
                       'Bakti BCA Scholarship Awardee (2024–2025)',
+                      'Shipped a POS system now in daily commercial use',
                       'Led two divisions across student organizations',
-                      'Duolingo English Test — 135/160',
-                      'ORACLE Academy & Cisco Networking Academy certified',
+                      'Oracle Academy & Cisco Networking Academy certified',
                     ].map((achievement, i) => (
                       <motion.li
                         key={achievement}

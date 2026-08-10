@@ -71,9 +71,9 @@ export function AboutSection() {
                   everything I can about technological advancement.
                 </p>
                 <p>
-                  Most recently I spent six months at{' '}
+                  Most recently I spent six months as an IT intern at{' '}
                   <strong className="font-medium text-foreground">
-                    PT. Toyota Motor Manufacturing Indonesia
+                    PT Toyota Motor Manufacturing Indonesia
                   </strong>{' '}
                   in the Infra-Security Standardization department, supporting a
                   company-wide MFA integration and writing secure coding
@@ -81,9 +81,10 @@ export function AboutSection() {
                   build things today.
                 </p>
                 <p>
-                  Outside of engineering I lead divisions in student
-                  organizations, where I design programs end to end and keep
-                  teams moving in the same direction.
+                  My work runs from full-stack products on Next.js and Supabase
+                  down to embedded hardware — my final-year project was a
+                  multisensor engine data logger on a custom PCB. Outside of
+                  engineering I lead divisions in student organizations.
                 </p>
               </div>
 

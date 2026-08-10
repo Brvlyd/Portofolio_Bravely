@@ -60,14 +60,22 @@ function Row({
  * the logos are actually readable when someone looks at them.
  */
 export function Marquee({ className }: { className?: string }) {
+  // Each row carries the full set so a single copy is wider than even a 1920px
+  // viewport — otherwise the duplicate used for looping shows up on screen.
+  // The second row starts from the midpoint so the two never line up.
   const half = Math.ceil(techIcons.length / 2);
-  const top = techIcons.slice(0, half);
-  const bottom = techIcons.slice(half);
+  const top = techIcons;
+  const bottom = [...techIcons.slice(half), ...techIcons.slice(0, half)];
 
   return (
-    <div className={cn('mask-fade-x group relative flex flex-col gap-3 overflow-hidden sm:gap-4', className)}>
-      <Row items={top} duration="42s" />
-      <Row items={bottom} reverse duration="48s" />
+    <div
+      className={cn(
+        'mask-fade-x group relative flex flex-col gap-3 overflow-hidden sm:gap-4',
+        className
+      )}
+    >
+      <Row items={top} duration="55s" />
+      <Row items={bottom} reverse duration="62s" />
     </div>
   );
 }
