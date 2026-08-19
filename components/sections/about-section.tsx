@@ -42,12 +42,15 @@ export function AboutSection() {
                   className="relative overflow-hidden rounded-3xl border border-border/70 bg-card"
                 >
                   <img
-                    src="/images/Bravely.png"
+                    src="/images/Bravely.webp"
                     alt={`Portrait of ${profile.name}`}
                     /* Matches the source image's native 5:7, so object-cover
                        shows the full frame instead of cropping the bottom. */
                     className="aspect-[5/7] w-full object-cover object-center"
+                    width={795}
+                    height={1113}
                     loading="lazy"
+                    decoding="async"
                   />
                   {/* Bottom fade + caption */}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-5">

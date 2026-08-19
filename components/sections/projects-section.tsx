@@ -29,6 +29,7 @@ function ProjectCard({ project }: { project: Project }) {
               src={project.image}
               alt={`${project.title} logo`}
               loading="lazy"
+              decoding="async"
               className="h-full w-full object-contain p-8"
               whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
               transition={{ duration: 0.45, ease: ease.out }}

@@ -251,6 +251,30 @@ html {
   }
 }
 
+/* Hero depth layer — orbs drift, shells rotate. Transform-only so the
+   compositor handles them without waking the main thread each frame. */
+@keyframes orbFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -9%, 0) scale(1.1);
+  }
+  66% {
+    transform: translate3d(-7%, 6%, 0) scale(0.92);
+  }
+}
+
+@keyframes shellSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-aurora {
   animation: auroraDrift 22s ease-in-out infinite;
 }
@@ -275,6 +299,18 @@ html {
 
 .typewriter-cursor {
   animation: blink 1.1s step-end infinite;
+}
+
+.animate-orb-float {
+  animation: orbFloat 18s ease-in-out infinite;
+}
+
+.animate-shell-spin {
+  animation: shellSpin 70s linear infinite;
+}
+
+.animate-shell-spin-reverse {
+  animation: shellSpin 95s linear infinite reverse;
 }
 
 /* Noise grain — keeps large flat gradients from banding. */
@@ -329,6 +365,9 @@ html {
   .animate-marquee,
   .animate-marquee-reverse,
   .animate-shimmer,
+  .animate-orb-float,
+  .animate-shell-spin,
+  .animate-shell-spin-reverse,
   .text-gradient-animate {
     animation: none;
   }

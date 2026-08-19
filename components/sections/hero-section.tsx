@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import {
   motion,
   useMotionTemplate,
@@ -14,15 +13,11 @@ import {
 import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MagneticButton } from '@/components/magnetic-button';
+import { HeroBackdrop } from '@/components/hero-backdrop';
 import { Typewriter, WordReveal } from '@/components/text-animations';
 import { Marquee } from '@/components/marquee';
 import { profile } from '@/lib/data';
 import { ease, spring } from '@/lib/motion';
-
-const ThreeHeroBackground = dynamic(
-  () => import('@/components/three-hero-background').then((m) => m.ThreeHeroBackground),
-  { ssr: false }
-);
 
 const socials = [
   { href: profile.linkedin, icon: Linkedin, label: 'LinkedIn' },
@@ -49,6 +44,12 @@ export function HeroSection() {
   const smoothY = useSpring(pointerY, spring.soft);
   const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-2) / 0.14), transparent 70%)`;
 
+  // Same pointer, normalised to [-1, 1], nudges the backdrop for parallax.
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const backdropX = useTransform(useSpring(tiltX, spring.soft), [-1, 1], [18, -18]);
+  const backdropY = useTransform(useSpring(tiltY, spring.soft), [-1, 1], [12, -12]);
+
   useEffect(() => {
     if (shouldReduceMotion) return;
 
@@ -57,11 +58,13 @@ export function HeroSection() {
       if (!rect) return;
       pointerX.set(e.clientX - rect.left);
       pointerY.set(e.clientY - rect.top);
+      tiltX.set((e.clientX / window.innerWidth) * 2 - 1);
+      tiltY.set((e.clientY / window.innerHeight) * 2 - 1);
     };
 
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => window.removeEventListener('mousemove', onMove);
-  }, [pointerX, pointerY, shouldReduceMotion]);
+  }, [pointerX, pointerY, tiltX, tiltY, shouldReduceMotion]);
 
   const scrollTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
@@ -76,14 +79,13 @@ export function HeroSection() {
       {/* Blueprint grid */}
       <div aria-hidden className="bg-grid mask-fade absolute inset-0 opacity-[0.55]" />
 
-      {/* 3D depth layer — particles, wireframe shells and distorted orbs */}
-      {!shouldReduceMotion && (
-        <div aria-hidden className="absolute inset-0 opacity-80">
-          <ThreeHeroBackground />
-        </div>
-      )}
+      {/* Depth layer — star field, wireframe shells and glow orbs */}
+      <HeroBackdrop
+        parallaxX={shouldReduceMotion ? undefined : backdropX}
+        parallaxY={shouldReduceMotion ? undefined : backdropY}
+      />
 
-      {/* Keeps the headline legible over the 3D layer */}
+      {/* Keeps the headline legible over the depth layer */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_45%,hsl(var(--background)/0.75),transparent_75%)]"

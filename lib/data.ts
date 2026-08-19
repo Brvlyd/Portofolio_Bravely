@@ -1,6 +1,8 @@
 /**
  * Single source of truth for every piece of CV content on the site.
- * Mirrors CV_ATS_Bravely_Dirgayuska.pdf — keep the two in sync.
+ * Mirrors CV_ATS_Bravely_Dirgayuska.pdf — keep the two in sync. Note the
+ * download button now serves CV_Bravely_Dirgayuska.pdf, which is a different
+ * (student-era) revision; the on-page copy below still follows the ATS one.
  */
 
 export const profile = {
@@ -14,8 +16,8 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/bravelyd/',
   github: 'https://github.com/Brvlyd',
   // Underscored filename keeps the download URL free of percent-encoding.
-  resume: '/resumes/CV_ATS_Bravely_Dirgayuska.pdf',
-  resumeFilename: 'CV_ATS_Bravely_Dirgayuska.pdf',
+  resume: '/resumes/CV_Bravely_Dirgayuska.pdf',
+  resumeFilename: 'CV_Bravely_Dirgayuska.pdf',
   roles: [
     'Computer Engineering Graduate',
     'Full-Stack Developer',
@@ -39,13 +41,13 @@ export type Project = {
   /** Omitted for projects with no logo — the card falls back to `icon`. */
   image?: string;
   /** Lucide icon name used when there is no logo image. */
-  icon?: 'circuit';
-  /** Override for logos that need a fixed backdrop (e.g. light-on-dark marks). */
+  icon?: 'circuit';ks). */
   imageBg?: string;
 };
 
 export const projects: Project[] = [
   {
+  /** Override for logos that need a fixed backdrop (e.g. light-on-dark mar
     title: 'SITOMAS Kresno',
     kind: 'Point-of-Sale & Inventory System',
     year: '2026',
@@ -59,7 +61,7 @@ export const projects: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL RLS'],
     github: 'https://github.com/Brvlyd/kresno',
     demo: 'https://sitomaskresno.vercel.app',
-    image: '/images/logo-kresno.png',
+    image: '/images/logo-kresno.webp',
   },
   {
     title: 'Bearion',
@@ -75,7 +77,7 @@ export const projects: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'PayPal', 'Biteship'],
     github: 'https://github.com/Brvlyd/bearions',
     demo: 'https://bearions.store',
-    image: '/images/bearion-logo2-light.png',
+    image: '/images/bearion-logo2-light.webp',
     // The Bearion mark is a light outline, so it needs a dark panel in both themes.
     imageBg: 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900',
   },
@@ -93,7 +95,7 @@ export const projects: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'OCR.space', 'Vercel'],
     github: 'https://github.com/Brvlyd/november-coffee',
     demo: 'https://november-coffee.vercel.app',
-    image: '/images/november_logo.png',
+    image: '/images/november_logo.webp',
   },
   {
     title: 'ICE Logger',
@@ -138,7 +140,7 @@ export const projects: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Vercel'],
     github: 'https://github.com/Brvlyd/RetenSYNC',
     demo: 'https://retensync.vercel.app/auth/login',
-    image: '/images/RetenSYNC.png',
+    image: '/images/RetenSYNC.webp',
   },
   {
     title: 'MarvelVerse',
@@ -153,7 +155,7 @@ export const projects: Project[] = [
     ],
     tags: ['React Native', 'API Integration', 'UI/UX'],
     github: 'https://github.com/Brvlyd/MarvelVerse',
-    image: '/images/marvel.png',
+    image: '/images/marvel.webp',
   },
 ];
 
