@@ -41,13 +41,13 @@ export type Project = {
   /** Omitted for projects with no logo — the card falls back to `icon`. */
   image?: string;
   /** Lucide icon name used when there is no logo image. */
-  icon?: 'circuit';ks). */
+  icon?: 'circuit';
+  /** Override for logos that need a fixed backdrop (e.g. light-on-dark marks). */
   imageBg?: string;
 };
 
 export const projects: Project[] = [
   {
-  /** Override for logos that need a fixed backdrop (e.g. light-on-dark mar
     title: 'SITOMAS Kresno',
     kind: 'Point-of-Sale & Inventory System',
     year: '2026',
