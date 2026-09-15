@@ -51,9 +51,10 @@ export function AboutSection() {
                   <img
                     src="/images/Bravely.webp"
                     alt={`Portrait of ${profile.name}`}
-                    /* Source is a tall full-body shot (720x1280) — object-top
-                       keeps the face in frame instead of centering on the torso. */
-                    className="aspect-[3/4] w-full object-cover object-top"
+                    /* Source is a tall full-body shot (720x1280). The 40% focal
+                       point pulls the crop down onto the face, and the scale
+                       zooms past `cover` so it fills the frame as a portrait. */
+                    className="aspect-[3/4] w-full scale-[1.5] object-cover object-[center_40%]"
                     width={720}
                     height={1280}
                     loading="lazy"

@@ -22,17 +22,18 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 217 91% 60%;
+    --ring: 262 83% 62%;
     --radius: 0.85rem;
 
-    /* Brand accents — used by gradients, glows and chart tokens alike. */
-    --brand-1: 217 91% 60%;
-    --brand-2: 189 94% 43%;
-    --brand-3: 258 90% 66%;
+    /* Brand accents — a blue→violet→fuchsia ramp, so nothing reads as
+       "all blue". Used by gradients, glows and chart tokens alike. */
+    --brand-1: 224 88% 60%;
+    --brand-2: 266 85% 62%;
+    --brand-3: 292 80% 64%;
 
-    --chart-1: 217 91% 60%;
-    --chart-2: 189 94% 43%;
-    --chart-3: 258 90% 66%;
+    --chart-1: 224 88% 60%;
+    --chart-2: 266 85% 62%;
+    --chart-3: 292 80% 64%;
     --chart-4: 43 74% 66%;
     --chart-5: 340 75% 55%;
   }
@@ -56,11 +57,11 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 217 91% 60%;
+    --ring: 266 90% 74%;
 
-    --brand-1: 213 94% 68%;
-    --brand-2: 187 92% 55%;
-    --brand-3: 258 90% 74%;
+    --brand-1: 220 92% 70%;
+    --brand-2: 266 90% 74%;
+    --brand-3: 292 88% 74%;
   }
 }
 

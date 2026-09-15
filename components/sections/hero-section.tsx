@@ -14,6 +14,7 @@ import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from 'lucide-reac
 import { Button } from '@heroui/react';
 import { MagneticButton } from '@/components/magnetic-button';
 import { HeroBackdrop } from '@/components/hero-backdrop';
+import { ProjectCardFan } from '@/components/project-card-fan';
 import { Typewriter, WordReveal } from '@/components/text-animations';
 import { Marquee } from '@/components/marquee';
 import { profile } from '@/lib/data';
@@ -104,160 +105,165 @@ export function HeroSection() {
         style={
           shouldReduceMotion ? undefined : { y: contentY, opacity: contentOpacity }
         }
-        className="container relative z-10 mx-auto max-w-5xl"
+        className="container relative z-10 mx-auto max-w-6xl"
       >
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-          }}
-          className="flex flex-col items-center text-center"
-        >
-          {/* Availability badge */}
+        <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_1fr]">
+          {/* Copy */}
           <motion.div
+            initial="hidden"
+            animate="visible"
             variants={{
-              hidden: { opacity: 0, y: 16, filter: 'blur(6px)' },
-              visible: {
-                opacity: 1,
-                y: 0,
-                filter: 'blur(0px)',
-                transition: { duration: 0.6, ease: ease.out },
-              },
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
             }}
-            className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-sm backdrop-blur-md"
+            className="flex flex-col items-center text-center lg:items-start lg:text-left"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span className="font-medium text-muted-foreground">
-              Open to opportunities
-            </span>
-            <span className="h-3.5 w-px bg-border" />
-            <span className="flex items-center gap-1 text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5" />
-              {profile.location}
-            </span>
-          </motion.div>
+            {/* Availability badge */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 16, filter: 'blur(6px)' },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: 'blur(0px)',
+                  transition: { duration: 0.6, ease: ease.out },
+                },
+              }}
+              className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-sm backdrop-blur-md"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="font-medium text-muted-foreground">
+                Open to opportunities
+              </span>
+              <span className="h-3.5 w-px bg-border" />
+              <span className="flex items-center gap-1 text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5" />
+                {profile.location}
+              </span>
+            </motion.div>
 
-          {/* Name */}
-          <h1 className="mb-5 font-display text-[clamp(2.5rem,8vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight">
-            <WordReveal
-              text="Hi, I'm"
-              animateOnMount
-              delay={0.2}
-              className="justify-center text-muted-foreground"
-            />
-            <br />
-            <WordReveal
-              text={profile.name}
-              animateOnMount
-              delay={0.4}
-              className="justify-center"
-              wordClassName="text-gradient-animate"
-            />
-          </h1>
+            {/* Name */}
+            <h1 className="mb-4 font-display text-[clamp(2.25rem,5.5vw,4rem)] font-extrabold leading-[1.04] tracking-tight">
+              <WordReveal
+                text="Hi, I'm"
+                animateOnMount
+                delay={0.2}
+                className="justify-center text-muted-foreground lg:justify-start"
+              />
+              <br />
+              <WordReveal
+                text={profile.name}
+                animateOnMount
+                delay={0.4}
+                className="justify-center lg:justify-start"
+                wordClassName="text-gradient-animate"
+              />
+            </h1>
 
-          {/* Role typewriter */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 14 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: ease.out, delay: 0.75 },
-              },
-            }}
-            className="mb-6 flex min-h-[2rem] items-center justify-center text-lg font-medium text-muted-foreground sm:text-xl md:text-2xl"
-          >
-            <Typewriter words={profile.roles} className="text-foreground" />
-          </motion.div>
+            {/* Role typewriter */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 14 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: ease.out, delay: 0.75 },
+                },
+              }}
+              className="mb-5 flex min-h-[2rem] items-center text-lg font-medium text-muted-foreground sm:text-xl"
+            >
+              <Typewriter words={profile.roles} className="text-foreground" />
+            </motion.div>
 
-          {/* Summary */}
-          <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 16 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: ease.out, delay: 0.85 },
-              },
-            }}
-            className="mb-10 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
-          >
-            {profile.summary}
-          </motion.p>
+            {/* One-line pitch — the long version lives in About */}
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 16 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: ease.out, delay: 0.85 },
+                },
+              }}
+              className="mb-8 max-w-md text-pretty leading-relaxed text-muted-foreground"
+            >
+              {profile.tagline}
+            </motion.p>
 
-          {/* CTAs */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 18 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: ease.out, delay: 0.95 },
-              },
-            }}
-            className="mb-10 flex flex-wrap items-center justify-center gap-3"
-          >
-            <MagneticButton strength={0.25}>
-              <Button
-                size="lg"
-                onPress={() => scrollTo('#projects')}
-                endContent={
-                  <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-                }
-                className="group h-12 rounded-full bg-gradient-to-r from-brand-1 to-brand-3 px-7 text-white shadow-lg shadow-brand-1/20 transition-shadow hover:shadow-xl hover:shadow-brand-1/30"
-              >
-                View My Work
-              </Button>
-            </MagneticButton>
-
-            <MagneticButton strength={0.25}>
-              <Button
-                as="a"
-                href={profile.resume}
-                download={profile.resumeFilename}
-                size="lg"
-                variant="bordered"
-                startContent={<Download className="h-4 w-4" />}
-                className="h-12 rounded-full border-border/70 bg-card/60 px-7 backdrop-blur-md transition-colors hover:border-brand-1/50 hover:bg-card/80"
-              >
-                Download CV
-              </Button>
-            </MagneticButton>
-          </motion.div>
-
-          {/* Socials */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 18 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: ease.out, delay: 1.05 },
-              },
-            }}
-            className="flex items-center gap-3"
-          >
-            {socials.map((social) => (
-              <MagneticButton key={social.label} strength={0.35}>
-                <motion.a
-                  href={social.href}
-                  target={social.href.startsWith('http') ? '_blank' : undefined}
-                  rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  aria-label={social.label}
-                  whileHover={shouldReduceMotion ? {} : { y: -4 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.94 }}
-                  transition={{ duration: 0.2, ease: ease.out }}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-brand-1/50 hover:text-brand-1"
+            {/* CTAs */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: ease.out, delay: 0.95 },
+                },
+              }}
+              className="mb-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            >
+              <MagneticButton strength={0.25}>
+                <Button
+                  size="lg"
+                  onPress={() => scrollTo('#projects')}
+                  endContent={
+                    <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                  }
+                  className="group h-12 rounded-full bg-gradient-to-r from-brand-1 via-brand-2 to-brand-3 px-7 text-white shadow-lg shadow-brand-2/25 transition-shadow hover:shadow-xl hover:shadow-brand-2/40"
                 >
-                  <social.icon className="h-5 w-5" />
-                </motion.a>
+                  View My Work
+                </Button>
               </MagneticButton>
-            ))}
+
+              <MagneticButton strength={0.25}>
+                <Button
+                  as="a"
+                  href={profile.resume}
+                  download={profile.resumeFilename}
+                  size="lg"
+                  variant="bordered"
+                  startContent={<Download className="h-4 w-4" />}
+                  className="h-12 rounded-full border-border/70 bg-card/60 px-7 backdrop-blur-md transition-colors hover:border-brand-2/60 hover:bg-card/80"
+                >
+                  Download CV
+                </Button>
+              </MagneticButton>
+            </motion.div>
+
+            {/* Socials */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: ease.out, delay: 1.05 },
+                },
+              }}
+              className="flex items-center gap-3"
+            >
+              {socials.map((social) => (
+                <MagneticButton key={social.label} strength={0.35}>
+                  <motion.a
+                    href={social.href}
+                    target={social.href.startsWith('http') ? '_blank' : undefined}
+                    rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    aria-label={social.label}
+                    whileHover={shouldReduceMotion ? {} : { y: -4 }}
+                    whileTap={shouldReduceMotion ? {} : { scale: 0.94 }}
+                    transition={{ duration: 0.2, ease: ease.out }}
+                    className="flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-brand-2/60 hover:text-brand-2"
+                  >
+                    <social.icon className="h-5 w-5" />
+                  </motion.a>
+                </MagneticButton>
+              ))}
+            </motion.div>
           </motion.div>
 
-        </motion.div>
+          {/* Live project screenshots, dealt out like a hand of cards */}
+          <ProjectCardFan />
+        </div>
       </motion.div>
 
       {/* Tech stack ticker */}
@@ -265,7 +271,7 @@ export function HeroSection() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.15, ease: ease.out }}
-        className="relative z-10 mt-16 w-full sm:mt-20"
+        className="relative z-10 mt-14 w-full sm:mt-16"
       >
         <p className="mb-5 text-center text-xs uppercase tracking-[0.22em] text-muted-foreground">
           Tools I build with

@@ -24,8 +24,9 @@ export const profile = {
     'Next.js & TypeScript',
     'Embedded & Hardware',
   ],
-  summary:
-    'Computer Engineering graduate with a motivation to learn all about technological advancements and a constant motivation to learn new things. I combine solid technical fundamentals with well-developed communication, teamwork, and problem-solving skills to deliver value and adapt quickly in dynamic environments.',
+  /** Hero pitch — deliberately one line; the full story lives in About. */
+  tagline:
+    'I ship production software end to end — from a gold jewelry POS running daily sales to an engine data logger on a custom PCB.',
 };
 
 export type Project = {
