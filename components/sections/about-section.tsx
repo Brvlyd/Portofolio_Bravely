@@ -1,26 +1,10 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Award, Briefcase, GraduationCap, Users } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
-import { SpotlightCard } from '@/components/spotlight-card';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { highlights, profile, projects, whatIDo } from '@/lib/data';
+import { FadeIn } from '@/components/motion-wrapper';
+import { profile } from '@/lib/data';
 import { ease } from '@/lib/motion';
-
-const iconMap = {
-  graduation: GraduationCap,
-  briefcase: Briefcase,
-  award: Award,
-  users: Users,
-} as const;
-
-const stats = [
-  { value: `${projects.length}+`, label: 'Projects shipped' },
-  { value: '3.77', label: 'GPA / 4.00' },
-  { value: '6 mo', label: 'Toyota internship' },
-  { value: '2', label: 'Division head roles' },
-];
 
 export function AboutSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -38,7 +22,7 @@ export function AboutSection() {
           />
 
           {/* Portrait + bio */}
-          <div className="mb-16 grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
             <FadeIn direction="right">
               <div className="group relative mx-auto w-full max-w-md">
                 {/* Gradient frame */}
@@ -78,24 +62,18 @@ export function AboutSection() {
               <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
                 <p>
                   I&apos;m a Computer Engineering graduate from Diponegoro
-                  University (GPA 3.77/4.00) with a constant motivation to learn
-                  everything I can about technological advancement.
+                  University who builds full-stack products on Next.js and
+                  Supabase, down to embedded hardware — my final-year project was
+                  a multisensor engine data logger on a custom PCB.
                 </p>
                 <p>
                   Most recently I spent six months as an IT intern at{' '}
                   <strong className="font-medium text-foreground">
                     PT Toyota Motor Manufacturing Indonesia
-                  </strong>{' '}
-                  in the Infra-Security Standardization department, supporting a
-                  company-wide MFA integration and writing secure coding
-                  awareness material — experience that shapes how carefully I
-                  build things today.
-                </p>
-                <p>
-                  My work runs from full-stack products on Next.js and Supabase
-                  down to embedded hardware — my final-year project was a
-                  multisensor engine data logger on a custom PCB. Outside of
-                  engineering I lead divisions in student organizations.
+                  </strong>
+                  , supporting a company-wide MFA integration and writing secure
+                  coding awareness material — experience that shapes how
+                  carefully I build things today.
                 </p>
               </div>
 
@@ -113,81 +91,6 @@ export function AboutSection() {
               </div>
             </FadeIn>
           </div>
-
-          {/* Quick facts — scannable numbers instead of more prose */}
-          <StaggerContainer
-            className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4"
-            staggerDelay={0.06}
-          >
-            {stats.map((stat) => (
-              <StaggerItem key={stat.label}>
-                <div className="rounded-2xl border border-border/70 bg-card/50 px-4 py-5 text-center backdrop-blur-sm">
-                  <p className="font-display text-2xl font-bold text-gradient sm:text-3xl">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                    {stat.label}
-                  </p>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-
-          {/* What I do */}
-          <div className="mb-16">
-            <FadeIn className="mb-8 text-center">
-              <h3 className="font-display text-2xl font-bold sm:text-3xl">
-                What <span className="text-gradient">I do</span>
-              </h3>
-            </FadeIn>
-
-            <StaggerContainer className="grid gap-4 sm:grid-cols-2" staggerDelay={0.08}>
-              {whatIDo.map((item, index) => (
-                <StaggerItem key={item.title}>
-                  <SpotlightCard className="h-full p-6">
-                    <div className="flex items-start gap-4">
-                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 font-mono text-xs font-semibold text-brand-1">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <div>
-                        <h4 className="mb-1.5 font-semibold">{item.title}</h4>
-                        <p className="text-sm leading-relaxed text-muted-foreground">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  </SpotlightCard>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </div>
-
-          {/* Highlight cards */}
-          <StaggerContainer
-            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-            staggerDelay={0.08}
-          >
-            {highlights.map((highlight) => {
-              const Icon = iconMap[highlight.icon as keyof typeof iconMap];
-              return (
-                <StaggerItem key={highlight.title}>
-                  <SpotlightCard className="h-full p-6">
-                    <motion.div
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.06, rotate: -4 }}
-                      transition={{ duration: 0.3, ease: ease.out }}
-                      className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-1 to-brand-3 shadow-lg shadow-brand-1/20"
-                    >
-                      <Icon className="h-6 w-6 text-white" />
-                    </motion.div>
-                    <h4 className="mb-1.5 font-semibold">{highlight.title}</h4>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {highlight.description}
-                    </p>
-                  </SpotlightCard>
-                </StaggerItem>
-              );
-            })}
-          </StaggerContainer>
         </div>
       </div>
     </section>

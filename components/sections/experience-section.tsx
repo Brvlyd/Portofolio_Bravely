@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Accordion, AccordionItem } from '@heroui/react';
 import { Building2, GraduationCap, Plus, Users } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
@@ -123,8 +123,6 @@ function PointsList({ points }: { points: string[] }) {
 }
 
 export function ExperienceSection() {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
     <section id="experience" className="relative py-24 sm:py-32">
       <div className="container mx-auto px-4">
@@ -180,8 +178,9 @@ export function ExperienceSection() {
               </FadeIn>
             </div>
 
-            {/* Education + achievements */}
-            <div>
+            {/* Education — sticky so the short column tracks the long timeline
+                instead of leaving a tall gap beside it. */}
+            <div className="lg:sticky lg:top-24 lg:self-start">
               <FadeIn className="mb-8 flex items-center gap-3" direction="left">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/20">
                   <GraduationCap className="h-5 w-5 text-white" />
@@ -224,39 +223,6 @@ export function ExperienceSection() {
                 ))}
               </StaggerContainer>
 
-              <FadeIn delay={0.2} className="mt-4">
-                <div className="overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-brand-1/[0.07] via-transparent to-brand-3/[0.07] p-6 backdrop-blur-sm">
-                  <h4 className="mb-4 font-display font-semibold">
-                    Key Achievements
-                  </h4>
-                  <ul className="space-y-3">
-                    {[
-                      'Bakti BCA Scholarship Awardee (2024–2025)',
-                      'Shipped a POS system now in daily commercial use',
-                      'Led two divisions across student organizations',
-                      'Oracle Academy & Cisco Networking Academy certified',
-                    ].map((achievement, i) => (
-                      <motion.li
-                        key={achievement}
-                        initial={{ opacity: 0, x: -12 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={viewport}
-                        transition={{
-                          duration: 0.45,
-                          ease: ease.out,
-                          delay: shouldReduceMotion ? 0 : i * 0.08,
-                        }}
-                        className="flex items-start gap-3 text-sm"
-                      >
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-brand-1 to-brand-2" />
-                        <span className="leading-relaxed text-muted-foreground">
-                          {achievement}
-                        </span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-              </FadeIn>
             </div>
           </div>
         </div>
