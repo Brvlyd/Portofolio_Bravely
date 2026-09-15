@@ -14,10 +14,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'assets-src/images'); // originals, not deployed
 const OUT = path.join(ROOT, 'public/images'); // optimized, deployed
 
+// Project screenshots — any file dropped in SHOTS_SRC gets optimized at a
+// fixed width (they're all full-desktop captures at a similar scale), no
+// need to add an entry per file like the PLAN map below.
+const SHOTS_SRC = path.join(ROOT, 'assets-src/screenshots');
+const SHOTS_OUT = path.join(ROOT, 'public/images/screenshots');
+const SHOTS_WIDTH = 1600;
+
 // Widths chosen at ~2x the largest CSS size each image is ever painted at.
 const PLAN = {
   'RetenSYNC.png': 1000,
-  'Bravely.png': 900,
+  'Bravely.jpeg': 900,
   'logo-kresno.png': 800,
   'marvel.png': 800,
   'november_logo.png': 800,
@@ -63,6 +70,33 @@ for (const [file, width] of Object.entries(PLAN)) {
   const dims = `${meta.width}x${meta.height} -> ${Math.min(width, meta.width)}w`;
   console.log(
     `${(b / 1024).toFixed(0).padStart(6)} KB -> ${(a / 1024).toFixed(0).padStart(5)} KB  ${dims.padEnd(22)} ${outName}`
+  );
+}
+
+fs.mkdirSync(SHOTS_SRC, { recursive: true });
+fs.mkdirSync(SHOTS_OUT, { recursive: true });
+
+for (const file of fs.readdirSync(SHOTS_SRC)) {
+  if (!/\.(png|jpe?g)$/i.test(file)) continue;
+
+  const src = path.join(SHOTS_SRC, file);
+  const outName = file.replace(/\.(png|jpe?g)$/i, '.webp');
+  const outPath = path.join(SHOTS_OUT, outName);
+
+  const meta = await sharp(src).metadata();
+  await sharp(src)
+    .resize({ width: SHOTS_WIDTH, withoutEnlargement: true })
+    .webp({ quality: 80, effort: 6 })
+    .toFile(outPath);
+
+  const b = fs.statSync(src).size;
+  const a = fs.statSync(outPath).size;
+  before += b;
+  after += a;
+
+  const dims = `${meta.width}x${meta.height} -> ${Math.min(SHOTS_WIDTH, meta.width)}w`;
+  console.log(
+    `${(b / 1024).toFixed(0).padStart(6)} KB -> ${(a / 1024).toFixed(0).padStart(5)} KB  ${dims.padEnd(22)} screenshots/${outName}`
   );
 }
 

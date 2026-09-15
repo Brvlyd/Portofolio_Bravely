@@ -1,11 +1,12 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import { Button } from '@heroui/react';
 import { ArrowUpRight, CircuitBoard, Github } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
+import { BrowserFrame } from '@/components/browser-frame';
 import { StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { Button } from '@/components/ui/button';
 import { projects, type Project } from '@/lib/data';
 import { ease } from '@/lib/motion';
 import { cn } from '@/lib/utils';
@@ -17,48 +18,69 @@ function ProjectCard({ project }: { project: Project }) {
     <SpotlightCard className="flex h-full flex-col">
       {/* Media */}
       <div className="p-3 pb-0">
-        <div
-          className={cn(
-            'relative aspect-[16/10] overflow-hidden rounded-xl border border-border/50',
-            project.imageBg ??
-              'bg-gradient-to-br from-muted/80 to-muted/40'
-          )}
-        >
-          {project.image ? (
-            <motion.img
-              src={project.image}
-              alt={`${project.title} logo`}
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-contain p-8"
-              whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
-              transition={{ duration: 0.45, ease: ease.out }}
+        {project.screenshot ? (
+          <div className="relative">
+            <BrowserFrame
+              url={project.screenshotUrl ?? ''}
+              src={project.screenshot}
+              alt={`${project.title} screenshot`}
             />
-          ) : (
-            /* Hardware project with no logo — a mark stands in for one. */
-            <motion.div
-              className="flex h-full w-full items-center justify-center"
-              whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
-              transition={{ duration: 0.45, ease: ease.out }}
-            >
-              <CircuitBoard className="h-16 w-16 text-brand-1/70" strokeWidth={1.2} />
-            </motion.div>
-          )}
-
-          <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-            {project.year}
-          </span>
-
-          {project.demo && (
-            <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              </span>
-              Live
+            <span className="absolute left-3 top-[3.25rem] rounded-full bg-black/55 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+              {project.year}
             </span>
-          )}
-        </div>
+            {project.demo && (
+              <span className="absolute right-3 top-[3.25rem] inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                Live
+              </span>
+            )}
+          </div>
+        ) : (
+          <div
+            className={cn(
+              'relative aspect-[16/10] overflow-hidden rounded-xl border border-border/50',
+              project.imageBg ?? 'bg-gradient-to-br from-muted/80 to-muted/40'
+            )}
+          >
+            {project.image ? (
+              <motion.img
+                src={project.image}
+                alt={`${project.title} logo`}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-contain p-8"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+                transition={{ duration: 0.45, ease: ease.out }}
+              />
+            ) : (
+              /* Hardware project with no logo — a mark stands in for one. */
+              <motion.div
+                className="flex h-full w-full items-center justify-center"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+                transition={{ duration: 0.45, ease: ease.out }}
+              >
+                <CircuitBoard className="h-16 w-16 text-brand-1/70" strokeWidth={1.2} />
+              </motion.div>
+            )}
+
+            <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+              {project.year}
+            </span>
+
+            {project.demo && (
+              <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                Live
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Body */}
@@ -98,27 +120,31 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="mt-6 flex gap-2 pt-1">
           {project.github && (
             <Button
-              variant="outline"
+              as="a"
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="bordered"
               size="sm"
-              asChild
+              startContent={<Github className="h-3.5 w-3.5" />}
               className="flex-1 rounded-lg border-border/70 bg-background/50 transition-colors hover:border-brand-1/50"
             >
-              <a href={project.github} target="_blank" rel="noopener noreferrer">
-                <Github className="mr-1.5 h-3.5 w-3.5" />
-                Code
-              </a>
+              Code
             </Button>
           )}
           {project.demo && (
             <Button
+              as="a"
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
               size="sm"
-              asChild
+              endContent={
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              }
               className="group/btn flex-1 rounded-lg bg-gradient-to-r from-brand-1 to-brand-3 text-white shadow-sm transition-shadow hover:shadow-md hover:shadow-brand-1/25"
             >
-              <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                Visit
-                <ArrowUpRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-              </a>
+              Visit
             </Button>
           )}
         </div>

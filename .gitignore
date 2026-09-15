@@ -31,6 +31,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# generated application PDF (regenerate with scripts/build-portfolio-pdf.mjs)
+/assets-src/portfolio-pdf-shots/
+/*.pdf
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

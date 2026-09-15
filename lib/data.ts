@@ -44,6 +44,14 @@ export type Project = {
   icon?: 'circuit';
   /** Override for logos that need a fixed backdrop (e.g. light-on-dark marks). */
   imageBg?: string;
+  /**
+   * Real screenshot of the live page, shown in a browser-chrome frame instead
+   * of the logo tile. Captured from the public-facing screen only — internal
+   * dashboards behind a login aren't reachable without credentials.
+   */
+  screenshot?: string;
+  /** Domain shown in the mock browser address bar above `screenshot`. */
+  screenshotUrl?: string;
 };
 
 export const projects: Project[] = [
@@ -62,6 +70,8 @@ export const projects: Project[] = [
     github: 'https://github.com/Brvlyd/kresno',
     demo: 'https://sitomaskresno.vercel.app',
     image: '/images/logo-kresno.webp',
+    screenshot: '/images/screenshots/sitomas-kresno-login.webp',
+    screenshotUrl: 'sitomaskresno.vercel.app',
   },
   {
     title: 'Bearion',
@@ -80,6 +90,8 @@ export const projects: Project[] = [
     image: '/images/bearion-logo2-light.webp',
     // The Bearion mark is a light outline, so it needs a dark panel in both themes.
     imageBg: 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900',
+    screenshot: '/images/screenshots/bearion-home.webp',
+    screenshotUrl: 'bearions.store',
   },
   {
     title: 'November Coffee',
@@ -96,6 +108,8 @@ export const projects: Project[] = [
     github: 'https://github.com/Brvlyd/november-coffee',
     demo: 'https://november-coffee.vercel.app',
     image: '/images/november_logo.webp',
+    screenshot: '/images/screenshots/november-coffee-login.webp',
+    screenshotUrl: 'november-coffee.vercel.app',
   },
   {
     title: 'ICE Logger',
@@ -141,6 +155,8 @@ export const projects: Project[] = [
     github: 'https://github.com/Brvlyd/RetenSYNC',
     demo: 'https://retensync.vercel.app/auth/login',
     image: '/images/RetenSYNC.webp',
+    screenshot: '/images/screenshots/retensync-login.webp',
+    screenshotUrl: 'retensync.vercel.app',
   },
   {
     title: 'MarvelVerse',

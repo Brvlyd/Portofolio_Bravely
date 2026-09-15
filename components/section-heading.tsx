@@ -39,7 +39,7 @@ export function SectionHeading({
         transition={{ duration: 0.5, ease: ease.out }}
         className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-sm"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand-1 to-brand-2" />
+        <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand-1 to-brand-3" />
         {eyebrow}
       </motion.span>
 

@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import { heroui } from '@heroui/react';
 
 const config: Config = {
   darkMode: ['class'],
@@ -10,6 +11,7 @@ const config: Config = {
     // Content data holds class names (gradients, image backdrops) too — without
     // this glob those utilities get purged from the build.
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@heroui/theme/dist/components/(button|card|input|textarea|chip|accordion|navbar|modal|image|spinner|ripple|divider|avatar|tabs|link).js',
   ],
   theme: {
     extend: {
@@ -98,6 +100,49 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    // HeroUI's colors mirror --brand-1 (blue) / --brand-3 (violet) from
+    // globals.css — kept as literal hsl() here since this file runs outside
+    // the browser and can't read CSS custom properties at build time.
+    heroui({
+      themes: {
+        light: {
+          colors: {
+            background: 'hsl(210, 40%, 99%)',
+            foreground: 'hsl(222, 47%, 11%)',
+            divider: 'hsl(214, 32%, 91%)',
+            focus: 'hsl(217, 91%, 60%)',
+            content1: 'hsl(0, 0%, 100%)',
+            primary: {
+              DEFAULT: 'hsl(217, 91%, 60%)',
+              foreground: 'hsl(210, 40%, 98%)',
+            },
+            secondary: {
+              DEFAULT: 'hsl(258, 90%, 66%)',
+              foreground: 'hsl(210, 40%, 98%)',
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: 'hsl(224, 47%, 5%)',
+            foreground: 'hsl(210, 40%, 98%)',
+            divider: 'hsl(217, 33%, 17%)',
+            focus: 'hsl(213, 94%, 68%)',
+            content1: 'hsl(224, 40%, 8%)',
+            primary: {
+              DEFAULT: 'hsl(213, 94%, 68%)',
+              foreground: 'hsl(222, 47%, 11%)',
+            },
+            secondary: {
+              DEFAULT: 'hsl(258, 90%, 74%)',
+              foreground: 'hsl(222, 47%, 11%)',
+            },
+          },
+        },
+      },
+    }),
+  ],
 };
 export default config;

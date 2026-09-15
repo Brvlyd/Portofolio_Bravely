@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import { Accordion, AccordionItem } from '@heroui/react';
 import { Building2, GraduationCap, Plus, Users } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
@@ -72,16 +73,52 @@ function TimelineEntry({ item, index }: { item: Experience; index: number }) {
           <p className="mt-0.5 text-sm italic text-muted-foreground">{item.note}</p>
         )}
 
-        <ul className="mt-3 space-y-2">
-          {item.points.map((point) => (
-            <li key={point} className="flex gap-2.5 text-sm text-muted-foreground">
-              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/50" />
-              <span className="leading-relaxed">{point}</span>
-            </li>
-          ))}
-        </ul>
+        <PointsList points={item.points} />
       </div>
     </motion.li>
+  );
+}
+
+/** Keeps the timeline scannable: only the first couple of bullets show up
+ * front, the rest collapse into an accordion instead of a text wall. */
+function PointsList({ points }: { points: string[] }) {
+  const VISIBLE = 2;
+  const shown = points.slice(0, VISIBLE);
+  const rest = points.slice(VISIBLE);
+
+  const renderPoint = (point: string) => (
+    <li key={point} className="flex gap-2.5 text-sm text-muted-foreground">
+      <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/50" />
+      <span className="leading-relaxed">{point}</span>
+    </li>
+  );
+
+  if (rest.length === 0) {
+    return <ul className="mt-3 space-y-2">{shown.map(renderPoint)}</ul>;
+  }
+
+  return (
+    <div className="mt-3">
+      <ul className="space-y-2">{shown.map(renderPoint)}</ul>
+      <Accordion
+        variant="light"
+        className="-mx-1 px-0"
+        itemClasses={{
+          trigger: 'py-1.5 px-1 gap-2',
+          title: 'text-xs font-medium text-brand-1',
+          content: 'pb-1 pt-0',
+          indicator: 'text-brand-1',
+        }}
+      >
+        <AccordionItem
+          key="more"
+          aria-label={`${rest.length} more details`}
+          title={`+${rest.length} more detail${rest.length > 1 ? 's' : ''}`}
+        >
+          <ul className="space-y-2">{rest.map(renderPoint)}</ul>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 }
 

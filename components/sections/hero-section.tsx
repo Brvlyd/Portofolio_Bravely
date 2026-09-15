@@ -11,7 +11,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { MagneticButton } from '@/components/magnetic-button';
 import { HeroBackdrop } from '@/components/hero-backdrop';
 import { Typewriter, WordReveal } from '@/components/text-animations';
@@ -42,7 +42,7 @@ export function HeroSection() {
   const pointerY = useMotionValue(-9999);
   const smoothX = useSpring(pointerX, spring.soft);
   const smoothY = useSpring(pointerY, spring.soft);
-  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-2) / 0.14), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-3) / 0.16), transparent 70%)`;
 
   // Same pointer, normalised to [-1, 1], nudges the backdrop for parallax.
   const tiltX = useMotionValue(0);
@@ -202,25 +202,27 @@ export function HeroSection() {
             <MagneticButton strength={0.25}>
               <Button
                 size="lg"
-                onClick={() => scrollTo('#projects')}
+                onPress={() => scrollTo('#projects')}
+                endContent={
+                  <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                }
                 className="group h-12 rounded-full bg-gradient-to-r from-brand-1 to-brand-3 px-7 text-white shadow-lg shadow-brand-1/20 transition-shadow hover:shadow-xl hover:shadow-brand-1/30"
               >
                 View My Work
-                <ArrowDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-0.5" />
               </Button>
             </MagneticButton>
 
             <MagneticButton strength={0.25}>
               <Button
+                as="a"
+                href={profile.resume}
+                download={profile.resumeFilename}
                 size="lg"
-                variant="outline"
-                asChild
+                variant="bordered"
+                startContent={<Download className="h-4 w-4" />}
                 className="h-12 rounded-full border-border/70 bg-card/60 px-7 backdrop-blur-md transition-colors hover:border-brand-1/50 hover:bg-card/80"
               >
-                <a href={profile.resume} download={profile.resumeFilename}>
-                  <Download className="mr-2 h-4 w-4" />
-                  Download CV
-                </a>
+                Download CV
               </Button>
             </MagneticButton>
           </motion.div>

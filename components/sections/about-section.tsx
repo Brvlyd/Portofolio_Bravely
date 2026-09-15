@@ -5,7 +5,7 @@ import { Award, Briefcase, GraduationCap, Users } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { highlights, profile, whatIDo } from '@/lib/data';
+import { highlights, profile, projects, whatIDo } from '@/lib/data';
 import { ease } from '@/lib/motion';
 
 const iconMap = {
@@ -14,6 +14,13 @@ const iconMap = {
   award: Award,
   users: Users,
 } as const;
+
+const stats = [
+  { value: `${projects.length}+`, label: 'Projects shipped' },
+  { value: '3.77', label: 'GPA / 4.00' },
+  { value: '6 mo', label: 'Toyota internship' },
+  { value: '2', label: 'Division head roles' },
+];
 
 export function AboutSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -44,11 +51,11 @@ export function AboutSection() {
                   <img
                     src="/images/Bravely.webp"
                     alt={`Portrait of ${profile.name}`}
-                    /* Matches the source image's native 5:7, so object-cover
-                       shows the full frame instead of cropping the bottom. */
-                    className="aspect-[5/7] w-full object-cover object-center"
-                    width={795}
-                    height={1113}
+                    /* Source is a tall full-body shot (720x1280) — object-top
+                       keeps the face in frame instead of centering on the torso. */
+                    className="aspect-[3/4] w-full object-cover object-top"
+                    width={720}
+                    height={1280}
                     loading="lazy"
                     decoding="async"
                   />
@@ -105,6 +112,25 @@ export function AboutSection() {
               </div>
             </FadeIn>
           </div>
+
+          {/* Quick facts — scannable numbers instead of more prose */}
+          <StaggerContainer
+            className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4"
+            staggerDelay={0.06}
+          >
+            {stats.map((stat) => (
+              <StaggerItem key={stat.label}>
+                <div className="rounded-2xl border border-border/70 bg-card/50 px-4 py-5 text-center backdrop-blur-sm">
+                  <p className="font-display text-2xl font-bold text-gradient sm:text-3xl">
+                    {stat.value}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                    {stat.label}
+                  </p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
 
           {/* What I do */}
           <div className="mb-16">

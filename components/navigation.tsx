@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 import { ease, spring } from '@/lib/motion';
 import { profile } from '@/lib/data';
@@ -119,10 +119,10 @@ export function Navigation() {
 
           <div className="flex items-center gap-1">
             <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(isDark ? 'light' : 'dark')}
-              className="rounded-full"
+              isIconOnly
+              variant="light"
+              radius="full"
+              onPress={() => setTheme(isDark ? 'light' : 'dark')}
               aria-label="Toggle theme"
             >
               {mounted && (
@@ -142,10 +142,11 @@ export function Navigation() {
             </Button>
 
             <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full md:hidden"
-              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              isIconOnly
+              variant="light"
+              radius="full"
+              className="md:hidden"
+              onPress={() => setIsMobileMenuOpen((open) => !open)}
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
             >

@@ -4,10 +4,7 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Loader2, Mail, MapPin, Phone, Send } from 'lucide-react';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { Button, Input, Textarea } from '@heroui/react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn } from '@/components/motion-wrapper';
@@ -203,18 +200,21 @@ export function ContactSection() {
                         }}
                         className={field.id === 'subject' ? 'sm:col-span-2' : ''}
                       >
-                        <Label htmlFor={field.id} className="text-sm">
-                          {field.label}
-                        </Label>
                         <Input
                           id={field.id}
                           name={field.id}
                           type={field.type}
+                          label={field.label}
                           value={formData[field.id]}
                           onChange={handleChange}
                           placeholder={field.placeholder}
-                          required
-                          className="mt-2 h-11 rounded-xl border-border/70 bg-background/50 transition-shadow focus-visible:ring-brand-1/40"
+                          isRequired
+                          variant="bordered"
+                          radius="lg"
+                          classNames={{
+                            inputWrapper:
+                              'border-border/70 bg-background/50 data-[hover=true]:border-brand-1/50 group-data-[focus=true]:border-brand-1/60',
+                          }}
                         />
                       </motion.div>
                     ))}
@@ -230,18 +230,21 @@ export function ContactSection() {
                       delay: shouldReduceMotion ? 0 : 0.32,
                     }}
                   >
-                    <Label htmlFor="message" className="text-sm">
-                      Message
-                    </Label>
                     <Textarea
                       id="message"
                       name="message"
+                      label="Message"
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Tell me more..."
-                      required
-                      rows={6}
-                      className="mt-2 resize-none rounded-xl border-border/70 bg-background/50 transition-shadow focus-visible:ring-brand-1/40"
+                      isRequired
+                      minRows={6}
+                      variant="bordered"
+                      radius="lg"
+                      classNames={{
+                        inputWrapper:
+                          'border-border/70 bg-background/50 data-[hover=true]:border-brand-1/50 group-data-[focus=true]:border-brand-1/60',
+                      }}
                     />
                   </motion.div>
 
@@ -257,20 +260,18 @@ export function ContactSection() {
                   >
                     <Button
                       type="submit"
-                      disabled={isSubmitting}
+                      isDisabled={isSubmitting}
+                      size="lg"
+                      startContent={
+                        isSubmitting ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        )
+                      }
                       className="group h-12 w-full rounded-xl bg-gradient-to-r from-brand-1 to-brand-3 text-white shadow-lg shadow-brand-1/20 transition-shadow hover:shadow-xl hover:shadow-brand-1/30"
                     >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                          Send Message
-                        </>
-                      )}
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </motion.div>
                 </form>

@@ -1,6 +1,7 @@
 import { Navigation } from '@/components/navigation';
 import { AuroraBackground } from '@/components/aurora-background';
 import { HeroSection } from '@/components/sections/hero-section';
+import { ShowcaseSection } from '@/components/sections/showcase-section';
 import { AboutSection } from '@/components/sections/about-section';
 import { SkillsSection } from '@/components/sections/skills-section';
 import { ProjectsSection } from '@/components/sections/projects-section';
@@ -20,6 +21,7 @@ export default function Home() {
       */}
       <main className="relative overflow-x-clip">
         <HeroSection />
+        <ShowcaseSection />
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
