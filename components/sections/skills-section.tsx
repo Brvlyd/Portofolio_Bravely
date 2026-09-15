@@ -2,10 +2,11 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Award,
+  BadgeCheck,
   Code2,
   Cpu,
   Database,
+  GraduationCap,
   Languages,
   Layers,
   ShieldCheck,
@@ -14,7 +15,7 @@ import {
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion-wrapper';
-import { certifications, languages, skillGroups } from '@/lib/data';
+import { credentials, languages, skillGroups, type Credential } from '@/lib/data';
 import { ease } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +27,29 @@ const iconMap = {
   wrench: Wrench,
   cpu: Cpu,
 } as const;
+
+const credentialGroups: {
+  kind: Credential['kind'];
+  label: string;
+  icon: typeof GraduationCap;
+  accent: string;
+  labelColor: string;
+}[] = [
+  {
+    kind: 'training',
+    label: 'Training & Programs',
+    icon: GraduationCap,
+    accent: 'from-amber-500 to-orange-400',
+    labelColor: 'text-amber-500',
+  },
+  {
+    kind: 'certification',
+    label: 'Certifications',
+    icon: BadgeCheck,
+    accent: 'from-brand-1 to-brand-3',
+    labelColor: 'text-brand-2',
+  },
+];
 
 export function SkillsSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -104,51 +128,59 @@ export function SkillsSection() {
             </SpotlightCard>
           </FadeIn>
 
-          {/* Certifications & awards */}
+          {/* Training & certifications — two groups, one card treatment, so
+              nothing is singled out over the rest. */}
           <FadeIn>
             <div className="rounded-3xl border border-border/70 bg-card/60 p-6 backdrop-blur-sm sm:p-10">
               <div className="mb-8 text-center">
                 <h3 className="font-display text-2xl font-bold">
-                  Certifications &amp; <span className="text-gradient">Awards</span>
+                  Training &amp; <span className="text-gradient">Certifications</span>
                 </h3>
               </div>
 
-              <StaggerContainer
-                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
-                staggerDelay={0.06}
-              >
-                {certifications.map((cert) => (
-                  <StaggerItem key={cert.name} className="h-full">
-                    <motion.div
-                      whileHover={shouldReduceMotion ? {} : { y: -3 }}
-                      transition={{ duration: 0.25, ease: ease.out }}
-                      className={cn(
-                        'flex h-full items-start gap-3 rounded-xl border p-4 transition-colors',
-                        cert.award
-                          ? 'border-amber-500/40 bg-gradient-to-br from-amber-500/[0.08] to-transparent sm:col-span-2 lg:col-span-1'
-                          : 'border-border/60 bg-background/50 hover:border-brand-1/40'
-                      )}
-                    >
-                      {cert.award ? (
-                        <Award className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                      ) : (
-                        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-gradient-to-r from-brand-1 to-brand-2" />
-                      )}
-                      <div>
-                        <p className="text-sm font-medium leading-snug">{cert.name}</p>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {cert.issuer} · {cert.year}
-                        </p>
-                        {cert.detail && (
-                          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                            {cert.detail}
-                          </p>
-                        )}
-                      </div>
-                    </motion.div>
-                  </StaggerItem>
+              <div className="grid gap-8 md:grid-cols-2">
+                {credentialGroups.map((group) => (
+                  <div key={group.label}>
+                    <div className="mb-4 flex items-center gap-2">
+                      <group.icon className={cn('h-4 w-4', group.labelColor)} />
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                        {group.label}
+                      </p>
+                    </div>
+
+                    <StaggerContainer className="grid gap-3" staggerDelay={0.06}>
+                      {credentials
+                        .filter((item) => item.kind === group.kind)
+                        .map((item) => (
+                          <StaggerItem key={item.name}>
+                            <motion.div
+                              whileHover={shouldReduceMotion ? {} : { y: -3 }}
+                              transition={{ duration: 0.25, ease: ease.out }}
+                              className="flex h-full items-start gap-3 rounded-xl border border-border/60 bg-background/50 p-4 transition-colors hover:border-brand-2/50"
+                            >
+                              <span
+                                className={cn(
+                                  'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br shadow-sm',
+                                  group.accent
+                                )}
+                              >
+                                <group.icon className="h-3.5 w-3.5 text-white" />
+                              </span>
+                              <div>
+                                <p className="text-sm font-medium leading-snug">
+                                  {item.name}
+                                </p>
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  {item.issuer} · {item.year}
+                                </p>
+                              </div>
+                            </motion.div>
+                          </StaggerItem>
+                        ))}
+                    </StaggerContainer>
+                  </div>
                 ))}
-              </StaggerContainer>
+              </div>
             </div>
           </FadeIn>
         </div>

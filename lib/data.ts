@@ -316,26 +316,44 @@ export const languages = [
 
 // The hero ticker renders brand logos from lib/tech-icons.ts (auto-generated).
 
-export const certifications = [
+export type Credential = {
+  name: string;
+  issuer: string;
+  year: string;
+  /** Programs attended vs. credentials earned — rendered as two groups. */
+  kind: 'training' | 'certification';
+};
+
+export const credentials: Credential[] = [
   {
     name: 'Bakti BCA Scholarship Awardee',
     issuer: 'PT Bank Central Asia Tbk',
     year: '2024 – 2025',
-    detail:
-      'Completed mentoring, workshops, and seminars; developed a Business Impact Plan for local MSMEs.',
-    award: true,
+    kind: 'training',
   },
   {
     name: 'Digital Talent: Java Fundamentals & Programming',
     issuer: 'Pusbang Profesi dan Sertifikasi',
     year: '2024',
+    kind: 'training',
   },
-  { name: 'Java Programming', issuer: 'Oracle Academy', year: '2024' },
-  { name: 'Java Fundamentals', issuer: 'Oracle Academy', year: '2023' },
+  {
+    name: 'Java Programming',
+    issuer: 'Oracle Academy',
+    year: '2024',
+    kind: 'certification',
+  },
+  {
+    name: 'Java Fundamentals',
+    issuer: 'Oracle Academy',
+    year: '2023',
+    kind: 'certification',
+  },
   {
     name: 'IT Essentials: PC Hardware and Software',
     issuer: 'Cisco Networking Academy',
     year: '2023',
+    kind: 'certification',
   },
 ];
 
