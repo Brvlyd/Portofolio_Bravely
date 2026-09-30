@@ -26,7 +26,7 @@ export const profile = {
   ],
   /** Hero pitch — deliberately one line; the full story lives in About. */
   tagline:
-    'I ship production software end to end — from a gold jewelry POS running daily sales to an engine data logger on a custom PCB.',
+    'I ship production software end to end - from a gold jewelry POS running daily sales to an engine data logger on a custom PCB.',
 };
 
 export type Project = {

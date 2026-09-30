@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE_URL = process.env.SITE_URL ?? 'http://localhost:4173';
 const SHOT_DIR = path.join(ROOT, 'assets-src/portfolio-pdf-shots');
-const PDF_PATH = path.join(ROOT, 'Bravely_Dirgayuska_Portfolio_Pages.pdf');
+const PDF_PATH = path.join(ROOT, process.env.PDF_NAME ?? 'Bravely_Dirgayuska_Portfolio_Pages.pdf');
 
 const VIEWPORT = { width: 1440, height: 900 };
 // 2x for a crisp screenshot; dropped to 1 automatically per-section below if
@@ -49,6 +49,10 @@ async function run() {
   const page = await context.newPage();
   await page.goto(SITE_URL, { waitUntil: 'load' });
   await page.waitForTimeout(1000);
+
+  // The scroll-progress bar is `position: fixed`, so it would otherwise be
+  // stamped as a stray line across whichever section is being captured.
+  await page.addStyleTag({ content: '[class*="z-[60]"] { display: none !important; }' });
 
   // Scroll the whole page first so every whileInView reveal has already
   // fired by the time we come back to screenshot each section.
