@@ -9,7 +9,7 @@ A modern, animated, and visually stunning portfolio website built with Next.js, 
 
 ## 🚀 Live Demo
 
-Visit the live portfolio: [Your Vercel URL]
+Visit the live portfolio: portfoliobravely.vercel.app
 
 ## ✨ Features
 
