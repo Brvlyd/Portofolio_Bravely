@@ -43,7 +43,7 @@ export function HeroSection() {
   const pointerY = useMotionValue(-9999);
   const smoothX = useSpring(pointerX, spring.soft);
   const smoothY = useSpring(pointerY, spring.soft);
-  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-3) / 0.16), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(420px circle at ${smoothX}px ${smoothY}px, hsl(var(--brand-3) / 0.14), transparent 70%)`;
 
   // Same pointer, normalised to [-1, 1], nudges the backdrop for parallax.
   const tiltX = useMotionValue(0);
@@ -72,10 +72,11 @@ export function HeroSection() {
   };
 
   return (
+    <>
     <section
       ref={sectionRef}
       id="home"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-16 pt-28"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-12 pt-24"
     >
       {/* Blueprint grid */}
       <div aria-hidden className="bg-grid mask-fade absolute inset-0 opacity-[0.55]" />
@@ -105,9 +106,9 @@ export function HeroSection() {
         style={
           shouldReduceMotion ? undefined : { y: contentY, opacity: contentOpacity }
         }
-        className="container relative z-10 mx-auto max-w-6xl"
+        className="container relative z-10 mx-auto max-w-7xl"
       >
-        <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_1fr]">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-6">
           {/* Copy */}
           <motion.div
             initial="hidden"
@@ -129,21 +130,21 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out },
                 },
               }}
-              className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-sm backdrop-blur-md"
+              className="mb-8 inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-5 py-2.5 text-base backdrop-blur-md"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="h-2 w-2 rounded-full bg-foreground" />
               <span className="font-medium text-muted-foreground">
                 Open to opportunities
               </span>
-              <span className="h-3.5 w-px bg-border" />
+              <span className="h-4 w-px bg-border" />
               <span className="flex items-center gap-1 text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5" />
+                <MapPin className="h-4 w-4" />
                 {profile.location}
               </span>
             </motion.div>
 
             {/* Name */}
-            <h1 className="mb-4 font-display text-[clamp(2.25rem,5.5vw,4rem)] font-extrabold leading-[1.04] tracking-tight">
+            <h1 className="mb-5 font-display text-[clamp(3rem,6.6vw,6rem)] font-extrabold leading-[1.02] tracking-tight">
               <WordReveal
                 text="Hi, I'm"
                 animateOnMount
@@ -170,7 +171,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.75 },
                 },
               }}
-              className="mb-5 flex min-h-[2rem] items-center text-lg font-medium text-muted-foreground sm:text-xl"
+              className="mb-6 flex min-h-[2.5rem] items-center text-xl font-medium text-muted-foreground sm:text-3xl"
             >
               <Typewriter words={profile.roles} className="text-foreground" />
             </motion.div>
@@ -185,7 +186,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.85 },
                 },
               }}
-              className="mb-8 max-w-md text-pretty leading-relaxed text-muted-foreground"
+              className="mb-10 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl"
             >
               {profile.tagline}
             </motion.p>
@@ -200,16 +201,16 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.95 },
                 },
               }}
-              className="mb-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              className="mb-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
             >
               <MagneticButton strength={0.25}>
                 <Button
                   size="lg"
                   onPress={() => scrollTo('#projects')}
                   endContent={
-                    <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                    <ArrowDown className="h-5 w-5 transition-transform group-hover:translate-y-0.5" />
                   }
-                  className="group h-12 rounded-full bg-gradient-to-r from-brand-1 via-brand-2 to-brand-3 px-7 text-white shadow-lg shadow-brand-2/25 transition-shadow hover:shadow-xl hover:shadow-brand-2/40"
+                  className="group h-14 rounded-full px-9 text-base bg-foreground text-background transition-colors hover:bg-foreground/85"
                 >
                   View My Work
                 </Button>
@@ -222,8 +223,8 @@ export function HeroSection() {
                   download={profile.resumeFilename}
                   size="lg"
                   variant="bordered"
-                  startContent={<Download className="h-4 w-4" />}
-                  className="h-12 rounded-full border-border/70 bg-card/60 px-7 backdrop-blur-md transition-colors hover:border-brand-2/60 hover:bg-card/80"
+                  startContent={<Download className="h-5 w-5" />}
+                  className="h-14 rounded-full border-border/70 bg-card/60 px-9 text-base backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-card/80"
                 >
                   Download CV
                 </Button>
@@ -240,7 +241,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 1.05 },
                 },
               }}
-              className="flex items-center gap-3"
+              className="flex items-center gap-4"
             >
               {socials.map((social) => (
                 <MagneticButton key={social.label} strength={0.35}>
@@ -252,9 +253,9 @@ export function HeroSection() {
                     whileHover={shouldReduceMotion ? {} : { y: -4 }}
                     whileTap={shouldReduceMotion ? {} : { scale: 0.94 }}
                     transition={{ duration: 0.2, ease: ease.out }}
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-brand-2/60 hover:text-brand-2"
+                    className="flex h-14 w-14 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-foreground/40 hover:text-foreground"
                   >
-                    <social.icon className="h-5 w-5" />
+                    <social.icon className="h-6 w-6" />
                   </motion.a>
                 </MagneticButton>
               ))}
@@ -266,18 +267,21 @@ export function HeroSection() {
         </div>
       </motion.div>
 
+    </section>
+
       {/* Tech stack ticker */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.15, ease: ease.out }}
-        className="relative z-10 mt-14 w-full sm:mt-16"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.8, ease: ease.out }}
+        className="relative z-10 w-full pb-4 pt-6 sm:pt-10"
       >
-        <p className="mb-5 text-center text-xs uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="mb-7 text-center text-base font-medium uppercase tracking-[0.26em] text-foreground/70 sm:text-lg">
           Tools I build with
         </p>
         <Marquee />
       </motion.div>
-    </section>
+    </>
   );
 }

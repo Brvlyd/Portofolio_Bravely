@@ -22,12 +22,12 @@ const kindMeta: Record<
   internship: {
     label: 'Internship',
     icon: Building2,
-    className: 'from-brand-1 to-brand-3',
+    className: 'bg-foreground text-background',
   },
   organization: {
     label: 'Leadership',
     icon: Users,
-    className: 'from-emerald-500 to-teal-400',
+    className: 'border border-border bg-card text-foreground',
   },
 };
 
@@ -46,11 +46,11 @@ function TimelineEntry({ item, index }: { item: Experience; index: number }) {
       {/* Node */}
       <span
         className={cn(
-          'absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-md',
+          'absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-xl',
           meta.className
         )}
       >
-        <Icon className="h-4 w-4 text-white" />
+        <Icon className="h-4 w-4" />
       </span>
 
       <div className="pb-10">
@@ -66,7 +66,7 @@ function TimelineEntry({ item, index }: { item: Experience; index: number }) {
         <h4 className="font-display text-lg font-semibold leading-snug">
           {item.role}
         </h4>
-        <p className="mt-0.5 text-sm font-medium text-brand-1">
+        <p className="mt-0.5 text-sm font-medium text-foreground/80">
           {item.organization}
         </p>
         {item.note && (
@@ -139,8 +139,8 @@ export function ExperienceSection() {
             {/* Timeline */}
             <div>
               <FadeIn className="mb-8 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-1 to-brand-3 shadow-lg shadow-brand-1/20">
-                  <Building2 className="h-5 w-5 text-white" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground">
+                  <Building2 className="h-5 w-5" />
                 </span>
                 <h3 className="font-display text-2xl font-bold">Experience</h3>
               </FadeIn>
@@ -149,7 +149,7 @@ export function ExperienceSection() {
                 {/* Rail */}
                 <span
                   aria-hidden
-                  className="absolute bottom-10 left-[17px] top-10 w-px bg-gradient-to-b from-brand-1/40 via-border to-transparent"
+                  className="absolute bottom-10 left-[17px] top-10 w-px bg-gradient-to-b from-foreground/30 via-border to-transparent"
                 />
                 {experiences.map((item, index) => (
                   <TimelineEntry key={item.role} item={item} index={index} />
@@ -182,8 +182,8 @@ export function ExperienceSection() {
                 instead of leaving a tall gap beside it. */}
             <div className="lg:sticky lg:top-24 lg:self-start">
               <FadeIn className="mb-8 flex items-center gap-3" direction="left">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/20">
-                  <GraduationCap className="h-5 w-5 text-white" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground">
+                  <GraduationCap className="h-5 w-5" />
                 </span>
                 <h3 className="font-display text-2xl font-bold">Education</h3>
               </FadeIn>
@@ -197,7 +197,7 @@ export function ExperienceSection() {
                           <h4 className="font-display font-semibold leading-snug">
                             {edu.institution}
                           </h4>
-                          <p className="mt-1 text-sm font-medium text-emerald-500 dark:text-emerald-400">
+                          <p className="mt-1 text-sm font-medium text-foreground/80">
                             {edu.degree}
                           </p>
                           <p className="mt-1 text-sm text-muted-foreground">
@@ -209,7 +209,7 @@ export function ExperienceSection() {
                         </span>
                       </div>
 
-                      <p className="mt-4 inline-flex rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-400/10 px-3 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                      <p className="mt-4 inline-flex rounded-lg border border-border bg-foreground/[0.04] px-3 py-1.5 text-sm font-medium text-foreground">
                         {edu.score}
                       </p>
 

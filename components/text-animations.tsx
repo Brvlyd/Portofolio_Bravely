@@ -72,7 +72,7 @@ export function Typewriter({
     <span className={cn('inline-flex items-center', className)}>
       <span>{shouldReduceMotion ? words[0] : text}</span>
       {!shouldReduceMotion && (
-        <span className="typewriter-cursor ml-1 inline-block h-[1.1em] w-[2px] translate-y-[0.1em] bg-gradient-to-b from-brand-1 to-brand-2" />
+        <span className="typewriter-cursor ml-1 inline-block h-[1.1em] w-[2px] translate-y-[0.1em] bg-foreground" />
       )}
     </span>
   );

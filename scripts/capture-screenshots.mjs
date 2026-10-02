@@ -53,7 +53,21 @@ const TARGETS = [
     url: 'https://sitomaskresno.vercel.app',
     fullPage: false,
   },
+  {
+    // Public landing/login screen — the board itself sits behind a login.
+    name: 'relay-login',
+    url: 'https://relay-frontend-alpha.vercel.app',
+    fullPage: false,
+  },
+  {
+    name: 'appointme-login',
+    url: 'https://appoint-me-psi.vercel.app',
+    fullPage: false,
+  },
 ];
+
+// `node scripts/capture-screenshots.mjs relay-about` re-shoots just that one.
+const only = process.argv.slice(2);
 
 const VIEWPORT = { width: 1440, height: 900 };
 
@@ -64,7 +78,7 @@ async function run() {
     deviceScaleFactor: 2,
   });
 
-  for (const target of TARGETS) {
+  for (const target of TARGETS.filter((t) => !only.length || only.includes(t.name))) {
     const page = await context.newPage();
     try {
       console.log(`-> ${target.name} (${target.url})`);

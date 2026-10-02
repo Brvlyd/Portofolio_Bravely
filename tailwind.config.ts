@@ -102,9 +102,9 @@ const config: Config = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    // HeroUI's colors mirror --brand-1 (blue) / --brand-3 (violet) from
-    // globals.css — kept as literal hsl() here since this file runs outside
-    // the browser and can't read CSS custom properties at build time.
+    // HeroUI's colors mirror the monochrome tokens in globals.css — kept as
+    // literal hsl() here since this file runs outside the browser and can't
+    // read CSS custom properties at build time.
     heroui({
       themes: {
         light: {
@@ -112,14 +112,14 @@ const config: Config = {
             background: 'hsl(210, 40%, 99%)',
             foreground: 'hsl(222, 47%, 11%)',
             divider: 'hsl(214, 32%, 91%)',
-            focus: 'hsl(262, 83%, 62%)',
+            focus: 'hsl(222, 47%, 30%)',
             content1: 'hsl(0, 0%, 100%)',
             primary: {
-              DEFAULT: 'hsl(224, 88%, 60%)',
+              DEFAULT: 'hsl(222, 47%, 11%)',
               foreground: 'hsl(210, 40%, 98%)',
             },
             secondary: {
-              DEFAULT: 'hsl(266, 85%, 62%)',
+              DEFAULT: 'hsl(222, 55%, 32%)',
               foreground: 'hsl(210, 40%, 98%)',
             },
           },
@@ -129,15 +129,15 @@ const config: Config = {
             background: 'hsl(224, 47%, 5%)',
             foreground: 'hsl(210, 40%, 98%)',
             divider: 'hsl(217, 33%, 17%)',
-            focus: 'hsl(266, 90%, 74%)',
+            focus: 'hsl(215, 20%, 65%)',
             content1: 'hsl(224, 40%, 8%)',
             primary: {
-              DEFAULT: 'hsl(220, 92%, 70%)',
+              DEFAULT: 'hsl(0, 0%, 100%)',
               foreground: 'hsl(222, 47%, 11%)',
             },
             secondary: {
-              DEFAULT: 'hsl(266, 90%, 74%)',
-              foreground: 'hsl(222, 47%, 11%)',
+              DEFAULT: 'hsl(222, 55%, 45%)',
+              foreground: 'hsl(210, 40%, 98%)',
             },
           },
         },

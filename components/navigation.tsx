@@ -82,7 +82,7 @@ export function Navigation() {
             className="group flex items-center gap-2.5 rounded-full pl-1 pr-3 text-left"
             aria-label="Back to top"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-1 to-brand-3 text-xs font-bold text-white shadow-sm">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background">
               {profile.initials}
             </span>
             <span className="hidden text-sm font-semibold tracking-tight transition-colors group-hover:text-brand-1 sm:block">

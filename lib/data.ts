@@ -21,12 +21,12 @@ export const profile = {
   roles: [
     'Computer Engineering Graduate',
     'Full-Stack Developer',
-    'Next.js & TypeScript',
-    'Embedded & Hardware',
+    'Software, Hardware & Network',
+    'Documented, Tested, Shipped',
   ],
-  /** Hero pitch — deliberately one line; the full story lives in About. */
+  /** Hero pitch — deliberately short; the full story lives in About. */
   tagline:
-    'I ship production software end to end - from a gold jewelry POS running daily sales to an engine data logger on a custom PCB.',
+    'I build full-stack products end to end — documented, tested, and deployed — on a Computer Engineering foundation in hardware and networking.',
 };
 
 export type Project = {
@@ -42,7 +42,7 @@ export type Project = {
   /** Omitted for projects with no logo — the card falls back to `icon`. */
   image?: string;
   /** Lucide icon name used when there is no logo image. */
-  icon?: 'circuit';
+  icon?: 'circuit' | 'kanban';
   /** Override for logos that need a fixed backdrop (e.g. light-on-dark marks). */
   imageBg?: string;
   /**
@@ -73,6 +73,41 @@ export const projects: Project[] = [
     image: '/images/logo-kresno.webp',
     screenshot: '/images/screenshots/sitomas-kresno-login.webp',
     screenshotUrl: 'sitomaskresno.vercel.app',
+  },
+  {
+    title: 'Relay',
+    kind: 'Project & Task Management Platform',
+    year: '2026',
+    summary:
+      'Built as a product-engineering assessment: a PM runs projects, tasks, and dependencies across an internal team, while clients get a read-only, masked view of their progress.',
+    highlights: [
+      'Drag-and-drop task board with dependency tracking, cycle detection, and a daily standup summary',
+      'RBAC + ABAC authorization, row locks, and optimistic versioning so concurrent edits are rejected instead of silently overwritten',
+      'Unit and end-to-end tests running in GitHub Actions CI; frontend on Vercel, API on Railway, audit trail made immutable by Postgres triggers',
+    ],
+    tags: ['Next.js', 'TypeScript', 'Hono', 'Prisma', 'PostgreSQL', 'Bun'],
+    // Source repos are private, so there's no Code link. The landing page needs
+    // no login.
+    demo: 'https://relay-frontend-alpha.vercel.app',
+    screenshot: '/images/screenshots/relay-login.webp',
+    screenshotUrl: 'relay-frontend-alpha.vercel.app',
+  },
+  {
+    title: 'AppointMe',
+    kind: 'Timezone-Aware Scheduling App',
+    year: '2026',
+    summary:
+      "Appointment scheduling across timezones: every time is stored in UTC, shown in each viewer's own zone, and only bookable when it falls inside working hours for everyone involved.",
+    highlights: [
+      "Validates 08:00–17:00 working hours against every participant's local time, organizer included",
+      'PostgreSQL with Prisma migrations and seed data, with the local database running in Docker',
+      'Pinned Node version and step-by-step setup docs, so the project runs the same on any machine',
+    ],
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Docker'],
+    github: 'https://github.com/Brvlyd/AppointMe',
+    demo: 'https://appoint-me-psi.vercel.app',
+    screenshot: '/images/screenshots/appointme-login.webp',
+    screenshotUrl: 'appoint-me-psi.vercel.app',
   },
   {
     title: 'Bearion',
@@ -250,64 +285,50 @@ export const education = [
   },
 ];
 
-/** Mirrors the CV's Technical Skills table, category for category. */
-export const skillGroups = [
+/**
+ * The stack drawn top to bottom, from what a user touches down to the metal it
+ * runs on. Order matters: the Skills section renders it as stacked layers.
+ */
+export const stackLayers = [
   {
-    title: 'Programming',
-    icon: 'code',
-    color: 'from-blue-500 to-cyan-400',
-    skills: ['TypeScript', 'JavaScript', 'Java', 'SQL', 'PHP', 'C/C++ (embedded)', 'VBA'],
+    title: 'Interface',
+    summary: 'Responsive, type-safe frontends.',
+    tools: ['TypeScript', 'Next.js', 'React', 'React Native', 'Tailwind CSS'],
   },
   {
-    title: 'Frameworks',
-    icon: 'layers',
-    color: 'from-violet-500 to-purple-400',
-    skills: ['Next.js', 'React', 'React Native', 'Tailwind CSS', 'Laravel'],
-  },
-  {
-    title: 'Backend & Data',
-    icon: 'database',
-    color: 'from-emerald-500 to-teal-400',
-    skills: [
-      'Supabase',
-      'PostgreSQL',
-      'Row-Level Security',
-      'REST APIs',
-      'Authentication & session management',
-    ],
+    title: 'Backend & data',
+    summary: 'Schemas and APIs designed before the UI depends on them.',
+    tools: ['PostgreSQL', 'Supabase', 'Prisma', 'Hono', 'REST APIs', 'Laravel'],
   },
   {
     title: 'Security',
-    icon: 'shield',
-    color: 'from-indigo-500 to-violet-400',
-    skills: [
-      'MFA / TOTP',
-      'Secure coding',
-      'SAST & DAST with SonarQube',
-      'Input validation',
-      'SQL injection & XSS prevention',
-    ],
+    summary: 'Authorization enforced on the server, never the client.',
+    tools: ['Row-Level Security', 'RBAC', 'MFA / TOTP', 'SAST & DAST', 'XSS & SQLi prevention'],
   },
   {
-    title: 'Tools',
-    icon: 'wrench',
-    color: 'from-amber-500 to-orange-400',
-    skills: ['Git & GitHub', 'Vercel', 'Figma', 'phpMyAdmin', 'Microsoft Excel (VBA)'],
+    title: 'Testing & docs',
+    summary: 'Tests for the logic, written plans and manuals for the rest.',
+    tools: ['Vitest', 'End-to-end tests', 'Test plans (UT / IFT / BCT)', 'READMEs', 'SOPs', 'Postman'],
   },
   {
-    title: 'Hardware & Network',
-    icon: 'cpu',
-    color: 'from-rose-500 to-pink-400',
-    skills: [
-      'ATmega328P',
-      'ADC sensor integration',
-      'PCB design',
-      'UART',
-      'IP addressing',
-      'Routing & switching',
-    ],
+    title: 'Delivery',
+    summary: 'Commit to production with CI and reproducible setups.',
+    tools: ['Git & GitHub', 'GitHub Actions', 'Docker', 'Vercel', 'Railway'],
+  },
+  {
+    title: 'Network',
+    summary: 'How the data actually gets there.',
+    tools: ['IP addressing', 'Routing & switching', 'LAN / Wi-Fi troubleshooting'],
+  },
+  {
+    title: 'Hardware',
+    summary: 'Firmware in C, down to the PCB it runs on.',
+    tools: ['C/C++', 'ATmega328P', 'PCB design', 'ADC sensors', 'UART'],
   },
 ];
+
+/** Worked with, but not core enough to headline a layer. */
+export const alsoUsed = ['Java', 'PHP', 'Excel VBA', 'Figma', 'phpMyAdmin'];
 
 export const languages = [
   { name: 'Bahasa Indonesia', level: 'Native' },

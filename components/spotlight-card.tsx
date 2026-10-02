@@ -31,8 +31,8 @@ export function SpotlightCard({
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
 
-  const glow = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--brand-1) / 0.16), transparent 72%)`;
-  const border = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--brand-3) / 0.55), transparent 70%)`;
+  const glow = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--brand-3) / 0.12), transparent 72%)`;
+  const border = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, hsl(var(--foreground) / 0.35), transparent 70%)`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (shouldReduceMotion || !ref.current) return;

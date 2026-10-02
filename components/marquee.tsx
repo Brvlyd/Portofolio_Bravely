@@ -1,81 +1,165 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+} from 'framer-motion';
 import { techIcons, type TechIcon } from '@/lib/tech-icons';
 import { cn } from '@/lib/utils';
 
 function TechPill({ icon }: { icon: TechIcon }) {
   return (
-    <div
-      className={cn(
-        'group/pill flex shrink-0 items-center gap-2.5 rounded-2xl border border-border/70 bg-card/70 px-4 py-3 backdrop-blur-sm',
-        'transition-colors duration-300 hover:border-[var(--tech)]/60 sm:gap-3 sm:px-5 sm:py-3.5'
-      )}
-      style={
-        {
-          // Per-item brand colour, swapped for the dark-mode-safe variant below.
-          '--tech': icon.hex,
-        } as React.CSSProperties
-      }
-    >
-      <svg viewBox="0 0 24 24" aria-hidden className="h-5 w-5 shrink-0 sm:h-6 sm:w-6">
-        {/* Two fills swapped by theme, so no runtime theme read is needed. */}
+    <div className="flex shrink-0 items-center gap-3 rounded-lg bg-card/90 px-5 py-3 sm:px-6 sm:py-3.5">
+      <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6 shrink-0 sm:h-7 sm:w-7">
+        {/* Brand colours, with the dark variant swapped in by theme so brand
+            blacks (Next.js, GitHub, Vercel) stay visible without a JS read. */}
         <path d={icon.path} className="dark:hidden" fill={icon.hex} />
         <path d={icon.path} className="hidden dark:block" fill={icon.darkHex} />
       </svg>
-      <span className="whitespace-nowrap text-sm font-semibold sm:text-base">
+      <span className="whitespace-nowrap text-base font-medium tracking-tight sm:text-lg">
         {icon.title}
       </span>
     </div>
   );
 }
 
+/** Copies rendered per row — enough that the strip never runs out mid-drag. */
+const COPIES = 3;
+
+/**
+ * One self-scrolling strip. Driven by a motion value rather than a CSS
+ * keyframe so it can be grabbed and flung: the drag writes straight to the
+ * offset, release velocity carries on as momentum, and the auto-scroll takes
+ * over again once that decays.
+ */
 function Row({
   items,
-  reverse = false,
-  duration,
+  direction,
+  speed,
 }: {
   items: TechIcon[];
-  reverse?: boolean;
-  duration: string;
+  /** -1 scrolls left, 1 scrolls right. */
+  direction: 1 | -1;
+  /** Auto-scroll speed in px/s. */
+  speed: number;
 }) {
+  const shouldReduceMotion = useReducedMotion();
+  const copyRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+
+  const copyWidth = useRef(0);
+  const hovered = useRef(false);
+  const drag = useRef<{ startX: number; startOffset: number; lastX: number; lastT: number } | null>(null);
+  const velocity = useRef(0);
+
+  // Keeps the offset inside one copy's width so the loop is seamless.
+  const wrap = (value: number) => {
+    const w = copyWidth.current;
+    if (!w) return value;
+    return (((value % w) + w) % w) - w;
+  };
+
+  useEffect(() => {
+    const el = copyRef.current;
+    if (!el) return;
+    const measure = () => {
+      copyWidth.current = el.offsetWidth;
+      x.set(wrap(x.get()));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useAnimationFrame((_, delta) => {
+    if (drag.current) return;
+    const dt = Math.min(delta, 64) / 1000;
+
+    // Momentum left over from a fling, decaying smoothly back to zero.
+    let move = velocity.current * dt;
+    velocity.current *= Math.pow(0.04, dt);
+    if (Math.abs(velocity.current) < 5) velocity.current = 0;
+
+    if (!shouldReduceMotion && !hovered.current) move += direction * speed * dt;
+    if (move) x.set(wrap(x.get() + move));
+  });
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    velocity.current = 0;
+    drag.current = { startX: e.clientX, startOffset: x.get(), lastX: e.clientX, lastT: e.timeStamp };
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d) return;
+    const dt = e.timeStamp - d.lastT;
+    if (dt > 0) velocity.current = ((e.clientX - d.lastX) / dt) * 1000;
+    d.lastX = e.clientX;
+    d.lastT = e.timeStamp;
+    x.set(wrap(d.startOffset + e.clientX - d.startX));
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current) return;
+    // A pointer that stopped before letting go shouldn't fling.
+    if (e.timeStamp - drag.current.lastT > 80) velocity.current = 0;
+    velocity.current = Math.max(-2500, Math.min(2500, velocity.current));
+    drag.current = null;
+  };
+
   return (
     <div
-      className={cn('flex w-max gap-3 sm:gap-4', reverse ? 'animate-marquee-reverse' : 'animate-marquee')}
-      style={{ animationDuration: duration }}
+      className="cursor-grab touch-pan-y select-none bg-foreground/[0.04] py-3 active:cursor-grabbing sm:py-4"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      onPointerEnter={(e) => {
+        if (e.pointerType === 'mouse') hovered.current = true;
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === 'mouse') hovered.current = false;
+      }}
     >
-      {/* Rendered twice so the -50% translate loops seamlessly. */}
-      {[0, 1].map((copy) => (
-        <div key={copy} className="flex shrink-0 gap-3 sm:gap-4" aria-hidden={copy === 1}>
-          {items.map((icon) => (
-            <TechPill key={`${copy}-${icon.title}`} icon={icon} />
-          ))}
-        </div>
-      ))}
+      <motion.div style={{ x }} className="flex w-max will-change-transform">
+        {Array.from({ length: COPIES }, (_, copy) => (
+          <div
+            key={copy}
+            ref={copy === 0 ? copyRef : undefined}
+            // Trailing padding (not flex gap) so one copy's width is exactly
+            // the distance the loop has to travel.
+            className="flex shrink-0 gap-4 pr-4 sm:gap-5 sm:pr-5"
+            aria-hidden={copy > 0}
+          >
+            {items.map((icon) => (
+              <TechPill key={`${copy}-${icon.title}`} icon={icon} />
+            ))}
+          </div>
+        ))}
+      </motion.div>
     </div>
   );
 }
 
 /**
- * Two-row brand ticker scrolling in opposite directions. Pauses on hover so
- * the logos are actually readable when someone looks at them.
+ * Two strips scrolling in opposite directions, the second running the list
+ * back to front so the rows never mirror each other. Pauses under the mouse,
+ * and either strip can be dragged.
  */
 export function Marquee({ className }: { className?: string }) {
-  // Each row carries the full set so a single copy is wider than even a 1920px
-  // viewport — otherwise the duplicate used for looping shows up on screen.
-  // The second row starts from the midpoint so the two never line up.
-  const half = Math.ceil(techIcons.length / 2);
-  const top = techIcons;
-  const bottom = [...techIcons.slice(half), ...techIcons.slice(0, half)];
+  const bottom = [...techIcons].reverse();
 
   return (
-    <div
-      className={cn(
-        'mask-fade-x group relative flex flex-col gap-3 overflow-hidden sm:gap-4',
-        className
-      )}
-    >
-      <Row items={top} duration="55s" />
-      <Row items={bottom} reverse duration="62s" />
+    <div className={cn('mask-fade-x relative flex flex-col gap-3 overflow-hidden', className)}>
+      <Row items={techIcons} direction={-1} speed={34} />
+      <Row items={bottom} direction={1} speed={28} />
     </div>
   );
 }

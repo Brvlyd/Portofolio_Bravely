@@ -269,7 +269,7 @@ export function ContactSection() {
                           <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                         )
                       }
-                      className="group h-12 w-full rounded-xl bg-gradient-to-r from-brand-1 to-brand-3 text-white shadow-lg shadow-brand-1/20 transition-shadow hover:shadow-xl hover:shadow-brand-1/30"
+                      className="group h-12 w-full rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/85"
                     >
                       {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>

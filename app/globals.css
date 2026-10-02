@@ -22,20 +22,22 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 262 83% 62%;
+    --ring: 222 47% 30%;
     --radius: 0.85rem;
 
-    /* Brand accents — a blue→violet→fuchsia ramp, so nothing reads as
-       "all blue". Used by gradients, glows and chart tokens alike. */
-    --brand-1: 224 88% 60%;
-    --brand-2: 266 85% 62%;
-    --brand-3: 292 80% 64%;
+    /* Brand accents — deliberately monochrome: ink → slate → navy. The
+       only hue on the page is a deep blue, used sparingly for glows. */
+    --brand-1: 222 47% 11%;
+    --brand-2: 215 16% 42%;
+    --brand-3: 222 55% 32%;
+    /* Soft wash used for ambient light — slate-blue on white, pure white on navy. */
+    --glow: 214 45% 72%;
 
-    --chart-1: 224 88% 60%;
-    --chart-2: 266 85% 62%;
-    --chart-3: 292 80% 64%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 222 47% 11%;
+    --chart-2: 215 16% 42%;
+    --chart-3: 222 55% 32%;
+    --chart-4: 215 20% 65%;
+    --chart-5: 222 40% 50%;
   }
 
   .dark {
@@ -57,11 +59,13 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 266 90% 74%;
+    --ring: 215 20% 65%;
 
-    --brand-1: 220 92% 70%;
-    --brand-2: 266 90% 74%;
-    --brand-3: 292 88% 74%;
+    /* White → slate → navy. */
+    --brand-1: 0 0% 100%;
+    --brand-2: 215 20% 68%;
+    --brand-3: 222 55% 45%;
+    --glow: 0 0% 100%;
   }
 }
 
@@ -86,7 +90,7 @@
   }
 
   ::selection {
-    background: hsl(var(--brand-1) / 0.28);
+    background: hsl(var(--brand-3) / 0.45);
   }
 }
 
@@ -104,9 +108,9 @@
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
       110deg,
-      hsl(var(--brand-1)),
-      hsl(var(--brand-2)),
-      hsl(var(--brand-3))
+      hsl(var(--brand-1)) 20%,
+      hsl(var(--brand-2)) 75%,
+      hsl(var(--brand-3)) 130%
     );
   }
 
@@ -116,12 +120,13 @@
     background-image: linear-gradient(
       110deg,
       hsl(var(--brand-1)),
+      hsl(var(--brand-1)),
       hsl(var(--brand-2)),
-      hsl(var(--brand-3)),
+      hsl(var(--brand-1)),
       hsl(var(--brand-1))
     );
     background-size: 250% 100%;
-    animation: gradientPan 8s linear infinite;
+    animation: gradientPan 10s linear infinite;
   }
 
   .glass {
@@ -182,7 +187,7 @@
   }
 
   .surface-hover {
-    @apply hover:border-[hsl(var(--brand-1)/0.45)];
+    @apply hover:border-[hsl(var(--foreground)/0.3)];
   }
 }
 
@@ -212,24 +217,6 @@ html {
   }
   66% {
     transform: translate3d(-5%, 4%, 0) scale(0.94);
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marqueeReverse {
-  from {
-    transform: translateX(-50%);
-  }
-  to {
-    transform: translateX(0);
   }
 }
 
@@ -278,20 +265,6 @@ html {
 
 .animate-aurora {
   animation: auroraDrift 22s ease-in-out infinite;
-}
-
-.animate-marquee {
-  animation: marquee 38s linear infinite;
-}
-
-.animate-marquee-reverse {
-  animation: marqueeReverse 44s linear infinite;
-}
-
-/* Hold the ticker still while it's being looked at. */
-.group:hover > .animate-marquee,
-.group:hover > .animate-marquee-reverse {
-  animation-play-state: paused;
 }
 
 .animate-shimmer {
@@ -343,7 +316,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--brand-1) / 0.6);
+  background: hsl(var(--muted-foreground) / 0.6);
 }
 
 /* ---------- Reduced motion ---------- */
@@ -363,8 +336,6 @@ html {
   }
 
   .animate-aurora,
-  .animate-marquee,
-  .animate-marquee-reverse,
   .animate-shimmer,
   .animate-orb-float,
   .animate-shell-spin,

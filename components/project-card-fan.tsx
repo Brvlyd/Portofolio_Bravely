@@ -39,12 +39,12 @@ export function ProjectCardFan() {
   return (
     /* The fan is laid out at one fixed size and scaled down on small screens —
        simpler than making every pixel offset responsive. */
-    <div className="relative mx-auto h-[200px] w-full max-w-[540px] sm:h-[300px]">
-      <div className="absolute inset-x-0 bottom-0 h-[290px] origin-bottom scale-[0.62] sm:scale-100">
+    <div className="relative mx-auto h-[240px] w-full max-w-[560px] sm:h-[430px]">
+      <div className="absolute inset-x-0 bottom-0 h-[290px] origin-bottom scale-[0.72] sm:scale-[1.3]">
         {/* Glow pooled under the fan */}
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-6 left-1/2 h-64 w-[26rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--brand-2)/0.35),transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute bottom-6 left-1/2 h-64 w-[26rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--brand-3)/0.4),transparent_70%)] blur-2xl"
         />
 
       {fanned.map((project, index) => {
@@ -79,9 +79,9 @@ export function ProjectCardFan() {
             {/* Browser chrome — signals these are live pages, not mockups */}
             <div className="flex items-center gap-2 border-b border-border/60 bg-muted/60 px-2.5 py-1.5">
               <span className="flex gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#ff5f57]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#febc2e]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground/25" />
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground/25" />
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground/25" />
               </span>
               <span className="truncate text-[9px] text-muted-foreground">
                 {project.screenshotUrl}

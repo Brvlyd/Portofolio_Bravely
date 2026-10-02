@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '@heroui/react';
-import { ArrowUpRight, CircuitBoard, Github } from 'lucide-react';
+import { ArrowUpRight, CircuitBoard, Github, KanbanSquare } from 'lucide-react';
 import { SectionHeading } from '@/components/section-heading';
 import { SpotlightCard } from '@/components/spotlight-card';
 import { BrowserFrame } from '@/components/browser-frame';
@@ -11,8 +11,11 @@ import { projects, type Project } from '@/lib/data';
 import { ease } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
+const fallbackIcons = { circuit: CircuitBoard, kanban: KanbanSquare } as const;
+
 function ProjectCard({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion();
+  const FallbackIcon = fallbackIcons[project.icon ?? 'circuit'];
 
   return (
     <SpotlightCard className="flex h-full flex-col">
@@ -31,8 +34,8 @@ function ProjectCard({ project }: { project: Project }) {
             {project.demo && (
               <span className="absolute right-3 top-[3.25rem] inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
                 </span>
                 Live
               </span>
@@ -56,13 +59,13 @@ function ProjectCard({ project }: { project: Project }) {
                 transition={{ duration: 0.45, ease: ease.out }}
               />
             ) : (
-              /* Hardware project with no logo — a mark stands in for one. */
+              /* Projects with no logo or public screenshot — an icon stands in. */
               <motion.div
                 className="flex h-full w-full items-center justify-center"
                 whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
                 transition={{ duration: 0.45, ease: ease.out }}
               >
-                <CircuitBoard className="h-16 w-16 text-brand-1/70" strokeWidth={1.2} />
+                <FallbackIcon className="h-16 w-16 text-foreground/60" strokeWidth={1.2} />
               </motion.div>
             )}
 
@@ -73,8 +76,8 @@ function ProjectCard({ project }: { project: Project }) {
             {project.demo && (
               <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
                 </span>
                 Live
               </span>
@@ -85,11 +88,11 @@ function ProjectCard({ project }: { project: Project }) {
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-6 pt-5">
-        <h3 className="font-display text-xl font-bold transition-colors group-hover:text-brand-1">
+        <h3 className="font-display text-xl font-bold transition-colors ">
           {project.title}
         </h3>
         {project.kind && (
-          <p className="mt-1 text-sm font-medium text-brand-2">{project.kind}</p>
+          <p className="mt-1 text-sm font-medium text-muted-foreground">{project.kind}</p>
         )}
 
         <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
@@ -99,7 +102,7 @@ function ProjectCard({ project }: { project: Project }) {
         <ul className="mt-4 space-y-2">
           {project.highlights.map((highlight) => (
             <li key={highlight} className="flex gap-2.5 text-sm text-muted-foreground">
-              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-brand-2" />
+              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-foreground/50" />
               <span className="leading-relaxed">{highlight}</span>
             </li>
           ))}
@@ -127,7 +130,7 @@ function ProjectCard({ project }: { project: Project }) {
               variant="bordered"
               size="sm"
               startContent={<Github className="h-3.5 w-3.5" />}
-              className="flex-1 rounded-lg border-border/70 bg-background/50 transition-colors hover:border-brand-1/50"
+              className="flex-1 rounded-lg border-border/70 bg-background/50 transition-colors hover:border-foreground/40"
             >
               Code
             </Button>
@@ -142,7 +145,7 @@ function ProjectCard({ project }: { project: Project }) {
               endContent={
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
               }
-              className="group/btn flex-1 rounded-lg bg-gradient-to-r from-brand-1 to-brand-3 text-white shadow-sm transition-shadow hover:shadow-md hover:shadow-brand-1/25"
+              className="group/btn flex-1 rounded-lg bg-foreground text-background transition-colors hover:bg-foreground/85"
             >
               Visit
             </Button>
@@ -162,7 +165,7 @@ export function ProjectsSection() {
             eyebrow="Projects"
             title="Featured"
             accent="work"
-            description="Production software in daily commercial use, plus embedded hardware — from a gold jewelry POS to an engine data logger."
+            description="Production software in daily commercial use, recent full-stack builds, and embedded hardware."
             className="mb-16"
           />
 

@@ -21,25 +21,25 @@ type Orb = {
 const ORBS: Orb[] = [
   {
     className: 'left-[8%] top-[18%] h-72 w-72',
-    color: 'hsl(var(--brand-1) / 0.5)',
+    color: 'hsl(var(--glow) / 0.5)',
     duration: '19s',
     delay: '0s',
   },
   {
     className: 'right-[10%] top-[30%] h-96 w-96',
-    color: 'hsl(var(--brand-2) / 0.45)',
+    color: 'hsl(var(--brand-3) / 0.35)',
     duration: '24s',
     delay: '-6s',
   },
   {
     className: 'left-[38%] top-[6%] h-64 w-64',
-    color: 'hsl(var(--brand-3) / 0.45)',
+    color: 'hsl(var(--glow) / 0.4)',
     duration: '21s',
     delay: '-12s',
   },
   {
     className: 'left-[18%] bottom-[14%] h-56 w-56',
-    color: 'hsl(var(--brand-2) / 0.4)',
+    color: 'hsl(var(--brand-3) / 0.3)',
     duration: '17s',
     delay: '-3s',
   },
@@ -68,12 +68,12 @@ export function HeroBackdrop({
           The tilt sits on the wrapper so the spin animation owns `transform`. */}
       <div className="absolute inset-0 grid place-items-center [perspective:1000px]">
         <div className="[transform:rotateX(74deg)]">
-          <div className="animate-shell-spin-reverse h-[34rem] w-[34rem] rounded-full border border-brand-1/25 sm:h-[44rem] sm:w-[44rem]" />
+          <div className="animate-shell-spin-reverse h-[34rem] w-[34rem] rounded-full border border-foreground/10 sm:h-[44rem] sm:w-[44rem]" />
         </div>
       </div>
       <div className="absolute inset-0 grid place-items-center [perspective:1000px]">
         <div className="[transform:rotateX(66deg)_rotateZ(18deg)]">
-          <div className="animate-shell-spin h-[26rem] w-[26rem] rounded-full border border-brand-2/20 sm:h-[33rem] sm:w-[33rem]" />
+          <div className="animate-shell-spin h-[26rem] w-[26rem] rounded-full border border-foreground/[0.07] sm:h-[33rem] sm:w-[33rem]" />
         </div>
       </div>
 
