@@ -292,36 +292,43 @@ export const education = [
 export const stackLayers = [
   {
     title: 'Interface',
+    icon: 'monitor' as const,
     summary: 'Responsive, type-safe frontends.',
     tools: ['TypeScript', 'Next.js', 'React', 'React Native', 'Tailwind CSS'],
   },
   {
     title: 'Backend & data',
+    icon: 'database' as const,
     summary: 'Schemas and APIs designed before the UI depends on them.',
     tools: ['PostgreSQL', 'Supabase', 'Prisma', 'Hono', 'REST APIs', 'Laravel'],
   },
   {
     title: 'Security',
+    icon: 'shield' as const,
     summary: 'Authorization enforced on the server, never the client.',
     tools: ['Row-Level Security', 'RBAC', 'MFA / TOTP', 'SAST & DAST', 'XSS & SQLi prevention'],
   },
   {
     title: 'Testing & docs',
+    icon: 'testing' as const,
     summary: 'Tests for the logic, written plans and manuals for the rest.',
     tools: ['Vitest', 'End-to-end tests', 'Test plans (UT / IFT / BCT)', 'READMEs', 'SOPs', 'Postman'],
   },
   {
     title: 'Delivery',
+    icon: 'delivery' as const,
     summary: 'Commit to production with CI and reproducible setups.',
     tools: ['Git & GitHub', 'GitHub Actions', 'Docker', 'Vercel', 'Railway'],
   },
   {
     title: 'Network',
+    icon: 'network' as const,
     summary: 'How the data actually gets there.',
     tools: ['IP addressing', 'Routing & switching', 'LAN / Wi-Fi troubleshooting'],
   },
   {
     title: 'Hardware',
+    icon: 'cpu' as const,
     summary: 'Firmware in C, down to the PCB it runs on.',
     tools: ['C/C++', 'ATmega328P', 'PCB design', 'ADC sensors', 'UART'],
   },
