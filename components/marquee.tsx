@@ -12,14 +12,14 @@ import { cn } from '@/lib/utils';
 
 function TechPill({ icon }: { icon: TechIcon }) {
   return (
-    <div className="flex shrink-0 items-center gap-3 rounded-lg bg-card/90 px-5 py-3 sm:px-6 sm:py-3.5">
-      <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6 shrink-0 sm:h-7 sm:w-7">
+    <div className="flex shrink-0 items-center gap-2.5 rounded-lg bg-card/90 px-4 py-2.5 sm:px-5 sm:py-3">
+      <svg viewBox="0 0 24 24" aria-hidden className="h-5 w-5 shrink-0 sm:h-6 sm:w-6">
         {/* Brand colours, with the dark variant swapped in by theme so brand
             blacks (Next.js, GitHub, Vercel) stay visible without a JS read. */}
         <path d={icon.path} className="dark:hidden" fill={icon.hex} />
         <path d={icon.path} className="hidden dark:block" fill={icon.darkHex} />
       </svg>
-      <span className="whitespace-nowrap text-base font-medium tracking-tight sm:text-lg">
+      <span className="whitespace-nowrap text-sm font-medium tracking-tight sm:text-base">
         {icon.title}
       </span>
     </div>

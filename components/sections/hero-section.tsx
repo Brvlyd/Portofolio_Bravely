@@ -130,21 +130,21 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out },
                 },
               }}
-              className="mb-8 inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-5 py-2.5 text-base backdrop-blur-md"
+              className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-[13px] backdrop-blur-md"
             >
-              <span className="h-2 w-2 rounded-full bg-foreground" />
+              <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
               <span className="font-medium text-muted-foreground">
                 Open to opportunities
               </span>
-              <span className="h-4 w-px bg-border" />
+              <span className="h-3.5 w-px bg-border" />
               <span className="flex items-center gap-1 text-muted-foreground">
-                <MapPin className="h-4 w-4" />
+                <MapPin className="h-3.5 w-3.5" />
                 {profile.location}
               </span>
             </motion.div>
 
             {/* Name */}
-            <h1 className="mb-5 font-display text-[clamp(3rem,6.6vw,6rem)] font-extrabold leading-[1.02] tracking-tight">
+            <h1 className="mb-4 font-display text-[clamp(2.4rem,5.3vw,4.8rem)] font-extrabold leading-[1.03] tracking-tight">
               <WordReveal
                 text="Hi, I'm"
                 animateOnMount
@@ -171,7 +171,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.75 },
                 },
               }}
-              className="mb-6 flex min-h-[2.5rem] items-center text-xl font-medium text-muted-foreground sm:text-3xl"
+              className="mb-5 flex min-h-[2rem] items-center text-lg font-medium text-muted-foreground sm:text-2xl"
             >
               <Typewriter words={profile.roles} className="text-foreground" />
             </motion.div>
@@ -186,7 +186,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.85 },
                 },
               }}
-              className="mb-10 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl"
+              className="mb-8 max-w-[29rem] text-pretty text-base leading-relaxed text-muted-foreground"
             >
               {profile.tagline}
             </motion.p>
@@ -201,16 +201,16 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 0.95 },
                 },
               }}
-              className="mb-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+              className="mb-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             >
               <MagneticButton strength={0.25}>
                 <Button
                   size="lg"
                   onPress={() => scrollTo('#projects')}
                   endContent={
-                    <ArrowDown className="h-5 w-5 transition-transform group-hover:translate-y-0.5" />
+                    <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
                   }
-                  className="group h-14 rounded-full px-9 text-base bg-foreground text-background transition-colors hover:bg-foreground/85"
+                  className="group h-11 rounded-full px-7 text-sm bg-foreground text-background transition-colors hover:bg-foreground/85"
                 >
                   View My Work
                 </Button>
@@ -223,8 +223,8 @@ export function HeroSection() {
                   download={profile.resumeFilename}
                   size="lg"
                   variant="bordered"
-                  startContent={<Download className="h-5 w-5" />}
-                  className="h-14 rounded-full border-border/70 bg-card/60 px-9 text-base backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-card/80"
+                  startContent={<Download className="h-4 w-4" />}
+                  className="h-11 rounded-full border-border/70 bg-card/60 px-7 text-sm backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-card/80"
                 >
                   Download CV
                 </Button>
@@ -241,7 +241,7 @@ export function HeroSection() {
                   transition: { duration: 0.6, ease: ease.out, delay: 1.05 },
                 },
               }}
-              className="flex items-center gap-4"
+              className="flex items-center gap-3"
             >
               {socials.map((social) => (
                 <MagneticButton key={social.label} strength={0.35}>
@@ -253,9 +253,9 @@ export function HeroSection() {
                     whileHover={shouldReduceMotion ? {} : { y: -4 }}
                     whileTap={shouldReduceMotion ? {} : { scale: 0.94 }}
                     transition={{ duration: 0.2, ease: ease.out }}
-                    className="flex h-14 w-14 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-foreground/40 hover:text-foreground"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground backdrop-blur-md transition-colors hover:border-foreground/40 hover:text-foreground"
                   >
-                    <social.icon className="h-6 w-6" />
+                    <social.icon className="h-5 w-5" />
                   </motion.a>
                 </MagneticButton>
               ))}
@@ -277,7 +277,7 @@ export function HeroSection() {
         transition={{ duration: 0.8, ease: ease.out }}
         className="relative z-10 w-full pb-4 pt-6 sm:pt-10"
       >
-        <p className="mb-7 text-center text-base font-medium uppercase tracking-[0.26em] text-foreground/70 sm:text-lg">
+        <p className="mb-5 text-center text-sm font-medium uppercase tracking-[0.24em] text-foreground/70 sm:text-base">
           Tools I build with
         </p>
         <Marquee />

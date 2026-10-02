@@ -39,8 +39,8 @@ export function ProjectCardFan() {
   return (
     /* The fan is laid out at one fixed size and scaled down on small screens —
        simpler than making every pixel offset responsive. */
-    <div className="relative mx-auto h-[240px] w-full max-w-[560px] sm:h-[430px]">
-      <div className="absolute inset-x-0 bottom-0 h-[290px] origin-bottom scale-[0.72] sm:scale-[1.3]">
+    <div className="relative mx-auto h-[215px] w-full max-w-[540px] sm:h-[335px]">
+      <div className="absolute inset-x-0 bottom-0 h-[290px] origin-bottom scale-[0.66] sm:scale-[1.06]">
         {/* Glow pooled under the fan */}
         <div
           aria-hidden
