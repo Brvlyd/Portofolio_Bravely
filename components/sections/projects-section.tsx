@@ -163,9 +163,9 @@ export function ProjectsSection() {
         <div className="mx-auto max-w-6xl">
           <SectionHeading
             eyebrow="Projects"
-            title="Featured"
-            accent="work"
-            description="Production software in daily commercial use, recent full-stack builds, and embedded hardware."
+            title="Things I've"
+            accent="shipped"
+            description="Real products with real users, from a POS running a shop every day to a task platform with CI and a concurrency-safe API. Each one links to the live site and the code."
             className="mb-16"
           />
 

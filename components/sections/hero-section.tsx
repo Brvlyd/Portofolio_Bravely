@@ -132,7 +132,6 @@ export function HeroSection() {
               }}
               className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-[13px] backdrop-blur-md"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
               <span className="font-medium text-muted-foreground">
                 Open to opportunities
               </span>

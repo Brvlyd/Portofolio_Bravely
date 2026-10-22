@@ -137,6 +137,13 @@ export function SkillsSection() {
                             </li>
                           ))}
                         </ul>
+
+                        {'usedIn' in layer && layer.usedIn && (
+                          <p className="mt-4 text-xs text-muted-foreground">
+                            <span className="font-medium text-foreground/80">Used in </span>
+                            {layer.usedIn.join(', ')}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </StaggerItem>

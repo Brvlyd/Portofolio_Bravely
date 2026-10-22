@@ -20,9 +20,9 @@ export default function Home() {
       */}
       <main className="relative overflow-x-clip">
         <HeroSection />
+        <ProjectsSection />
         <AboutSection />
         <SkillsSection />
-        <ProjectsSection />
         <ExperienceSection />
         <ContactSection />
       </main>

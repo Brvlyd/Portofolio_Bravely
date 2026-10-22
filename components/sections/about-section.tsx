@@ -27,7 +27,7 @@ export function AboutSection() {
             eyebrow="About"
             title="Get to know"
             accent="me"
-            description="Based in Jakarta. Curious about how things work, from the web app down to the wire."
+            description="Based in Jakarta. A junior developer with shipped work to show for it."
             className="mb-16"
           />
 
@@ -71,10 +71,12 @@ export function AboutSection() {
 
               <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
                 <p>
-                  I&apos;m a Computer Engineering graduate who gets genuinely excited
-                  about learning new technology and going deep on software, and about
-                  everything around the code: the environment it runs in, how it&apos;s
-                  deployed, and what keeps it maintainable.
+                  I&apos;m a junior full-stack developer who learns by building. My
+                  projects are the best summary of me: a POS system a gold shop runs
+                  every day, an e-commerce store with payments and shipping, and a task
+                  platform with CI and concurrency tests. I like going deep on software
+                  and on everything around the code: the environment it runs in, how
+                  it&apos;s deployed, and what keeps it maintainable.
                 </p>
                 <p>
                   <strong className="font-medium text-foreground">

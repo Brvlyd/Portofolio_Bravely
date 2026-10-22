@@ -19,9 +19,9 @@ const sora = Sora({
   weight: ['400', '500', '600', '700', '800'],
 });
 
-const title = 'Bravely Dirgayuska | Computer Engineering Graduate';
+const title = 'Bravely Dirgayuska | Junior Full-Stack Developer';
 const description =
-  'Portfolio of Bravely Dirgayuska — Computer Engineering graduate building full-stack products with Next.js, TypeScript, and Supabase.';
+  'Portfolio of Bravely Dirgayuska — junior full-stack developer shipping real products with Next.js, TypeScript, and PostgreSQL.';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://portfoliobravely.vercel.app'),
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   description,
   keywords: [
     'Bravely Dirgayuska',
+    'Junior Full-Stack Developer',
     'Computer Engineering',
-    'Full-Stack Developer',
     'Next.js',
     'TypeScript',
     'Supabase',

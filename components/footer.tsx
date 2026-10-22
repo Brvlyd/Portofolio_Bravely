@@ -39,9 +39,8 @@ export function Footer() {
               {profile.name}
             </h3>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {profile.title} building full-stack products with Next.js,
-              TypeScript, and Supabase. Open to new opportunities and
-              collaborations.
+              {profile.title} shipping products with Next.js, TypeScript, and
+              PostgreSQL. Open to new opportunities and collaborations.
             </p>
           </FadeIn>
 

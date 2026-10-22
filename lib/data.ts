@@ -8,7 +8,7 @@
 export const profile = {
   name: 'Bravely Dirgayuska',
   initials: 'BD',
-  title: 'Computer Engineering Graduate',
+  title: 'Junior Full-Stack Developer',
   location: 'Jakarta, Indonesia',
   email: 'bravelydirgayuska@gmail.com',
   phone: '+62 811-8899-743',
@@ -19,14 +19,14 @@ export const profile = {
   resume: '/resumes/CV_Bravely_Dirgayuska.pdf',
   resumeFilename: 'CV_Bravely_Dirgayuska.pdf',
   roles: [
-    'Computer Engineering Graduate',
-    'Full-Stack Developer',
-    'Software, Hardware & Network',
-    'Documented, Tested, Shipped',
+    'Junior Full-Stack Developer',
+    'Full-Stack with Next.js & TypeScript',
+    'Full-Stack, shipped to production',
+    'Full-Stack, documented & tested',
   ],
   /** Hero pitch — deliberately short; the full story lives in About. */
   tagline:
-    'I build full-stack products end to end — documented, tested, and deployed — on a Computer Engineering foundation in hardware and networking.',
+    'I build full-stack products end to end, from a gold-shop POS in daily use to an e-commerce store and a task platform with CI. Documented, tested, and deployed.',
 };
 
 export type Project = {
@@ -294,30 +294,35 @@ export const stackLayers = [
     title: 'Interface',
     icon: 'monitor' as const,
     summary: 'Responsive, type-safe frontends.',
+    usedIn: ['SITOMAS Kresno', 'Bearion', 'Relay', 'AppointMe'],
     tools: ['TypeScript', 'Next.js', 'React', 'React Native', 'Tailwind CSS'],
   },
   {
     title: 'Backend & data',
     icon: 'database' as const,
     summary: 'Schemas and APIs designed before the UI depends on them.',
+    usedIn: ['SITOMAS Kresno', 'Bearion', 'Relay', 'AppointMe'],
     tools: ['PostgreSQL', 'Supabase', 'Prisma', 'Hono', 'REST APIs', 'Laravel'],
   },
   {
     title: 'Security',
     icon: 'shield' as const,
     summary: 'Authorization enforced on the server, never the client.',
+    usedIn: ['SITOMAS Kresno', 'Bearion', 'Relay'],
     tools: ['Row-Level Security', 'RBAC', 'MFA / TOTP', 'SAST & DAST', 'XSS & SQLi prevention'],
   },
   {
     title: 'Testing & docs',
     icon: 'testing' as const,
     summary: 'Tests for the logic, written plans and manuals for the rest.',
+    usedIn: ['Relay', 'AppointMe'],
     tools: ['Vitest', 'End-to-end tests', 'Test plans (UT / IFT / BCT)', 'READMEs', 'SOPs', 'Postman'],
   },
   {
     title: 'Delivery',
     icon: 'delivery' as const,
     summary: 'Commit to production with CI and reproducible setups.',
+    usedIn: ['Relay', 'AppointMe', 'November Coffee'],
     tools: ['Git & GitHub', 'GitHub Actions', 'Docker', 'Vercel', 'Railway'],
   },
   {
@@ -330,6 +335,7 @@ export const stackLayers = [
     title: 'Hardware',
     icon: 'cpu' as const,
     summary: 'Firmware in C, down to the PCB it runs on.',
+    usedIn: ['ICE Logger'],
     tools: ['C/C++', 'ATmega328P', 'PCB design', 'ADC sensors', 'UART'],
   },
 ];
